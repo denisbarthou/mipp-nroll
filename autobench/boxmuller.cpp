@@ -1,7 +1,9 @@
 #include <iostream>
 #include <random>
+#include <stdint.h>
 
-#include "../MIPP/src/mipp.h"
+
+#include "../../MIPP/src/mipp.h"
 
 using namespace std;
 
@@ -104,7 +106,7 @@ int main(int argc, char* argv[])
 		np=atoi(argv[1]);
 
 	//print_vector(Z, np);
-	cout<<"Time: "<<(float)ts/1000000.0<<" Reg: "<<2<<endl;
+	cout<<(float)(ARRAY_SIZE*7/2)/(float)ts<<" "<<8<<" "<<endl;
 	
 	free(U);
 	free(Z);

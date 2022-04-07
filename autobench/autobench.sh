@@ -1,5 +1,12 @@
 #!/bin/bash
 
+
+REGISTRE_ALLOC_MODE="greedy"
+
+
+
+#fixed params
+
 FILE=""
 FULL_PARAMS=""
 PARAMS=""
@@ -10,14 +17,32 @@ CODE_FILE=""
 ALL_CODES_FILE_NAME="codes"
 LLC_FILES="llc"
 RUN_FILES="run"
+LOG_FILES="log"
+DATA_FILES="data"
 
 ALL_NAMES=""
 
-MAKESPACE="    "
+MAKESPACE="	"
 
 HEAD_GENERATE_PY="base_generate.txt"
 GENERATE_PY="generate.py"
 
+ORANGE_COLOR="\033[1;33m"
+NO_COLOR="\033[0m"
+
+RUN_FLOP=""
+RUN_REG=""
+
+function parse_run()
+{
+	RUN_FLOP="$1"
+	RUN_REG="$2"
+} 
+
+function section()
+{
+	echo -e "$ORANGE_COLOR$*$NO_COLOR"
+}
 function get_file_name()
 {
 	echo "$1" | cut -d\. -f 1
@@ -122,6 +147,7 @@ function write_gen()
 {
 	echo "$*" >> "$SCRIPTS_FILE/$GENERATE_PY"
 }
+
 function write_end_generate()
 {
 	tabul=""
@@ -173,6 +199,47 @@ function conc_list()
 	echo "$ret_list"
 }
 
+function write_begin_makefile()
+{
+	write_makefile ""
+	write_makefile "all: pdf"
+	write_makefile ""
+	write_makefile ".PRECIOUS: llc/%.llc"
+	write_makefile ""
+	write_makefile "all_run: $(conc_list "run/" "" "$ALL_NAMES")"
+	write_makefile ""
+	write_makefile "all_llc: $(conc_list "llc/" ".llc" "$ALL_NAMES")"
+	write_makefile ""
+	write_makefile "$LLC_FILES/%.llc: $ALL_CODES_FILE_NAME/%.cpp"
+	write_rule "clang++ \$< -S -emit-llvm -o \$@ -I.. -finline -march=native -O2"
+	write_makefile ""
+	write_makefile "$RUN_FILES/%: $LLC_FILES/%.llc"
+	write_rule "llc -O3 --regalloc=$REGISTRE_ALLOC_MODE $^ -filetype=obj -o \$@.o "
+	write_rule "clang++ \$@.o -O3 -o \$@"
+	write_rule "rm \$@.o"
+	write_makefile ""
+}
+
+
+function compile_all()
+{
+	cd "$CODE_FILE"
+	make all_run -j7
+	cd ..
+}
+
+function get_only_numbers()
+{
+	echo "$*" | sed 's/[^0-9]//g'
+}
+
+function pop_last()
+{
+	echo "$*" | cut -d\  -f 1-$(($(echo "$*" | awk '{print NF}')-1))
+}
+
+
+
 #======== PARSING ========
 
 
@@ -181,17 +248,23 @@ then
 	echo "usage: >>autobench.sh JINJA_BENCH.cpp NOM_PARAM1 MIN_VALUE_PARAM1 MAX_VALUE_PARAM1 NOM_PARAM12MIN_VALUE_PARAM2 MAX_VALUE_PARAM2 ..."
 	echo "jinja_bench.cpp doit être au format jinja"
 	echo ""
-	echo "jinja_bench.cpp doit print: - \"Time: TEMPS Reg: NOMBRE_REGISTRES\" si la configuration fonctionne"
-	echo "                              \"Time: none\" si la configuration n'est pas bonne"
+	echo "jinja_bench.cpp doit print: - \"FLOAT_OP_BY_CYCLES NOMBRE_REGISTRES \" si la configuration fonctionne"
+	echo "                              \"none\" si la configuration n'est pas bonne"
 	echo "(La configuration peut ne pas être bonne quand le degré de déroulage d'une matrice n'est pas en accord avec la sa taille)"
 fi
 
 
 #======== INIT ========
-echo "Initializing..."
+section "Initializing..."
 
 FILE=$(check_file $1)
 CODE_FILE="$(get_file_name $FILE)"
+
+if [ ! -f "$FILE" ]
+then
+	echo "Error: $FILE not found"
+	exit
+fi
 
 if [ -d "$CODE_FILE" ]
 then
@@ -202,6 +275,8 @@ cd "$CODE_FILE"
 mkdir "$ALL_CODES_FILE_NAME"
 mkdir "$LLC_FILES"
 mkdir "$RUN_FILES"
+#mkdir "$LOG_FILES"
+mkdir "$DATA_FILES"
 touch Makefile
 cd ..
 
@@ -212,7 +287,7 @@ set_args_mins_max $*
 
 
 #======  GENERATE_PY CREATION ======
-echo "Creation of $GENERATE_PY..."
+section "Creation of $GENERATE_PY..."
 
 
 cat "$SCRIPTS_FILE/$HEAD_GENERATE_PY" > "$SCRIPTS_FILE/$GENERATE_PY"
@@ -220,13 +295,13 @@ cat "$SCRIPTS_FILE/$HEAD_GENERATE_PY" > "$SCRIPTS_FILE/$GENERATE_PY"
 write_end_generate
 
 #======  GENERATE ======
-echo "Generations of all $CODE_FILE.cpp..."
+section "Generations of all $CODE_FILE.cpp..."
 
 $(python3 "$SCRIPTS_FILE/$GENERATE_PY" $FILE)
 
 	
 #===== COMPILING BENCHS =====
-echo "Compiling codes..."
+section "Compiling codes..."
 
 ALL_NAMES=""
 
@@ -236,12 +311,44 @@ do
 	ALL_NAMES="$ALL_NAMES $(get_file_name $fn)"
 done
 
-write_makefile ""
-write_makefile "all: pdf"
-write_makefile ""
-write_makefile "all_run: $(conc_list "run/" "" "$ALL_NAMES")"
-write_makefile ""
-write_makefile "$LLC_FILES/%.llc: $ALL_CODES_FILE_NAME/%.cpp"
-write_rule "clang++ \$< -S -emit-llvm -o \$@ -finline -march=native -O2"
-write_makefile ""
+write_begin_makefile
 
+compile_all
+
+#===== COMPILING BENCHS =====
+section "Running benchs..."
+
+AVAILABLE_RUN=""
+
+cd $CODE_FILE
+touch "$DATA_FILES/time.txt"
+
+for run in $ALL_NAMES
+do
+	result=$(./$RUN_FILES/$run)
+	if [ "$(echo "$result" | grep "none")" == "" ]
+	then
+		AVAILABLE_RUN="$AVAILABLE_RUN $run"
+		time_line="$run $REGISTRE_ALLOC_MODE"
+
+		to_extract=$(echo "$run" | sed 's/_/\ /g' )
+		fields=""
+		for ar in $PARAMS
+		do
+			fields="$(echo "$to_extract" | awk '{print $NF}') $fields"
+			to_extract=$(pop_last "$to_extract")
+		done
+
+		for fie in $fields
+		do
+			time_line="$time_line $(get_only_numbers "$fie")"
+		done
+
+		parse_run $result
+
+		time_line="$time_line $RUN_FLOP"
+
+		echo "$time_line"
+	fi
+done
+cd ..
