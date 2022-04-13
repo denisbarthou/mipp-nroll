@@ -19,6 +19,7 @@ LLC_FILES="llc"
 RUN_FILES="run"
 LOG_FILES="log"
 DATA_FILES="data"
+SILENT="no"
 
 ALL_NAMES=""
 
@@ -223,7 +224,12 @@ function write_begin_makefile()
 function compile_all()
 {
 	cd "$CODE_FILE"
-	make all_run -j7
+	if [ "$SILENT" == "yes" ]
+	then
+		make all_run -j7 > "$LOG_FILES/compile_log.txt"
+	else
+		make all_run -j7
+	fi
 	cd ..
 }
 
@@ -296,7 +302,10 @@ cd "$CODE_FILE"
 mkdir "$ALL_CODES_FILE_NAME"
 mkdir "$LLC_FILES"
 mkdir "$RUN_FILES"
-#mkdir "$LOG_FILES"
+if [ "$SILENT" == "yes" ]
+then
+	mkdir "$LOG_FILES"
+fi
 mkdir "$DATA_FILES"
 touch Makefile
 cd ..
@@ -419,7 +428,12 @@ write_plot "set palette defined ( 0 \"#0000FF\", 1 \"#FF0000\" )"
 write_plot "plot '< echo \"16 25\"' w impulse lc rgb \"red\", \"$DATA_FILES/dat.txt\" using (\$$(($n_params+5))+\$$(($n_params+7))):$(($n_params+3)):(\$$(($n_params+9))>$FLOAT_REGISTERS_AVAILABLE?1:0) with circles palette"
 write_plot "quit"
 
-gnuplot "$DATA_FILES/plot.txt"
+if [ "$SILENT" == "yes" ]
+then
+	gnuplot "$DATA_FILES/plot.txt" 2> "$LOG_FILES/gnuplot_log.txt" 1> "$LOG_FILES/gnuplot_log.txt"
+else
+	gnuplot "$DATA_FILES/plot.txt"
+fi
 
 cd ..
 

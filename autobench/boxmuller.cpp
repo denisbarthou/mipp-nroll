@@ -106,7 +106,7 @@ int main(int argc, char* argv[])
 		np=atoi(argv[1]);
 
 	//print_vector(Z, np);
-	cout<<(float)(ARRAY_SIZE*7/2)/(float)ts<<" "<<4*{{ opt.i }}<<" "<<endl;
+	cout<<(float)(ARRAY_SIZE*7/2)/(float)ts<<" "<<4<<" "<<endl;
 	//cout<<ts<<" "<<8<<" "<<endl;
 	
 	free(U);
