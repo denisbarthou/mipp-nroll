@@ -216,7 +216,7 @@ function write_begin_makefile()
 	write_makefile ""
 	write_makefile "$RUN_FILES/%: $LLC_FILES/%.llc"
 	write_rule "llc -O3 --regalloc=$REGISTRE_ALLOC_MODE $^ -filetype=obj -o \$@.o "
-	write_rule "$COMPILATOR \$@.o -O3 -o \$@"
+	write_rule "$COMPILATOR $RUN_FILES/runner.o \$@.o -O3 -o \$@"
 	write_makefile ""
 }
 
@@ -342,6 +342,8 @@ do
 done
 
 write_begin_makefile
+
+clang++ "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native -o "$CODE_FILE/$RUN_FILES/runner.o"
 
 compile_all
 
