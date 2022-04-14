@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#========== VARIABLES MODIFIABLES =======
+
+
+
+
 FLOAT_REGISTERS_AVAILABLE="16"
 REGISTRE_ALLOC_MODE="greedy"
 COMPILATOR="clang++"
@@ -7,9 +12,15 @@ RUN_OMP_NUM_THREADS="2"
 BOUND_CORE="3"
 
 pdf_proc="AMD RYZEN 5"
-pdf_hight="2"
+pdf_hight="25"
 
-#fixed params
+
+
+
+
+
+
+#========= fixed params and code begin =========
 
 FILE=""
 FULL_PARAMS=""
@@ -556,7 +567,7 @@ fi
 
 if [ "$SILENT" == "yes" ]
 then
-	gnuplot "$DATA_FILES/plot.txt" 25> "$LOG_FILES/gnuplot_log.txt" 1> "$LOG_FILES/gnuplot_log.txt"
+	gnuplot "$DATA_FILES/plot.txt" 2> "$LOG_FILES/gnuplot_log.txt" 1> "$LOG_FILES/gnuplot_log.txt"
 else
 	gnuplot "$DATA_FILES/plot.txt"
 fi

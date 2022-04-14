@@ -49,3 +49,11 @@ exemple pour tiled gemm:
 >>autobench.sh tiledgemm.cpp ui 1 7 uk 1 7 uj 1 7
 
 (cela veut dire que les paramètres jinja ui, uk et uj vont tous varier entre 1 et 7)
+
+
+
+
+========= DESCRIPTION DES PDF =========
+
+Les premières variables du script autobench.sh sont les variables qu'on peut modifier.
+Nottament le nombre de registres vectoriels, le nom du processeur, le numéro du coeur sur lequel bind le bench ect...
