@@ -42,7 +42,7 @@ bool enable()
 
 int n_reg_max()
 {
-    return 4*{{ opt.ui }};
+    return 4;
 }
 
 float bench() {
