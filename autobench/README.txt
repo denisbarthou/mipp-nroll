@@ -33,17 +33,19 @@ on peut utiliser #pragma clang loop vectorize(disable) pour l'empêcher de vecto
 
 >>autobench.sh JINJA_BENCH.cpp NOM_PARAM1 MIN_VALUE_PARAM1 MAX_VALUE_PARAM1 NOM_PARAM12MIN_VALUE_PARAM2 MAX_VALUE_PARAM2 ... [-options]
 
-Lance les tests avec toutes les combinaisons possibles des paramètres entre leur valeures minimales et maximales.
+Lance les tests avec toutes les combinaisons possibles des paramètres jinja entre leur valeures minimales et maximales.
 
 options:    -run pour lancer les benchs sans recompiler (SEULEMENT SI LES .o SONT DEJA GÉNÉRÉS)
 			-h ou -hyperthreading pour lancer en hyperthreading
 			-m ou -multithreading pour lancer en hyperthreading
 			-all pour lancer en mode normal, hyperthreadé et hyperthreadé
 
-exemple pour tiled gemm:
 
+Génère le pdf dans le fichier ./pdf
+
+
+exemple pour tiled gemm:
 
 >>autobench.sh tiledgemm.cpp ui 1 7 uk 1 7 uj 1 7
 
-
-Génère le pdf dans le fichier ./pdf
+(cela veut dire que les paramètres jinja ui, uk et uj vont tous varier entre 1 et 7)

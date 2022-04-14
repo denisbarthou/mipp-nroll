@@ -93,9 +93,7 @@ float bench()
       TYPE *B=&vB[tj*BLOCKJ*BLOCKK];                
       TYPE *C=&vC[tj*BLOCKI*BLOCKJ];                
       TYPE *A=&vA[0];
-      #pragma omp parallel for                               
       for (int i=0;i<BLOCKI;i+={{ opt.ui }}) {
-        #pragma omp parallel for            
         for (int j=0;j<BLOCKJ;j+={{ opt.uj }}*nv) {           
           {% for ii in range(opt.ui) -%}
           {% for jj in range(opt.uj) -%}
@@ -104,7 +102,6 @@ float bench()
           c{{ ii }}{{ jj }}.load(&C[(i+{{ ii }})*BLOCKJ + j + ({{ jj }})*nv]);
           {% endfor %}
           {%- endfor -%}
-          #pragma omp parallel for
           for (int k=0;k<BLOCKK;k+={{ opt.uk }}) {            
              {% for ii in range(opt.ui) -%}
              {% for kk in range(opt.uk) -%}

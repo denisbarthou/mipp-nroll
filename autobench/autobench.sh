@@ -556,7 +556,7 @@ fi
 
 if [ "$SILENT" == "yes" ]
 then
-	gnuplot "$DATA_FILES/plot.txt" 2> "$LOG_FILES/gnuplot_log.txt" 1> "$LOG_FILES/gnuplot_log.txt"
+	gnuplot "$DATA_FILES/plot.txt" 25> "$LOG_FILES/gnuplot_log.txt" 1> "$LOG_FILES/gnuplot_log.txt"
 else
 	gnuplot "$DATA_FILES/plot.txt"
 fi
