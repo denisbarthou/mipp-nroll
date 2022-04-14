@@ -287,51 +287,73 @@ section "Initializing..."
 FILE=$(check_file $1)
 CODE_FILE="$(get_file_name $FILE)"
 
-if [ ! -f "$FILE" ]
-then
-	echo "Error: $FILE not found"
-	exit
-fi
-
-if [ -d "$CODE_FILE" ]
-then
-	rm -r "$CODE_FILE"
-fi
-mkdir "$CODE_FILE"
-cd "$CODE_FILE"
-mkdir "$ALL_CODES_FILE_NAME"
-mkdir "$LLC_FILES"
-mkdir "$RUN_FILES"
-if [ "$SILENT" == "yes" ]
-then
-	mkdir "$LOG_FILES"
-fi
-mkdir "$DATA_FILES"
-touch Makefile
-cd ..
-
 shift
+
+ONLY_RUN="no"
+
+if [ "$1" == "-run" ]
+then
+	ONLY_RUN="yes"
+	shift
+fi
+
+if [ "$ONLY_RUN" == "no" ]
+then
+	if [ ! -f "$FILE" ]
+	then
+		echo "Error: $FILE not found"
+		exit
+	fi
+
+	if [ -d "$CODE_FILE" ]
+	then
+		rm -r "$CODE_FILE"
+	fi
+	if [ ! -d "pdf" ]
+	then
+		mkdir "pdf"
+	fi
+	mkdir "$CODE_FILE"
+	cd "$CODE_FILE"
+	mkdir "$ALL_CODES_FILE_NAME"
+	mkdir "$LLC_FILES"
+	mkdir "$RUN_FILES"
+	if [ "$SILENT" == "yes" ]
+	then
+		mkdir "$LOG_FILES"
+	fi
+	mkdir "$DATA_FILES"
+	touch Makefile
+	cd ..
+fi
+
 
 set_args_mins_max $*
 
 
 
 #======  GENERATE_PY CREATION ======
-section "Creation of $GENERATE_PY..."
+if [ "$ONLY_RUN" == "no" ]
+then
+	section "Creation of $GENERATE_PY..."
 
 
-cat "$SCRIPTS_FILE/$HEAD_GENERATE_PY" > "$SCRIPTS_FILE/$GENERATE_PY"
+	cat "$SCRIPTS_FILE/$HEAD_GENERATE_PY" > "$SCRIPTS_FILE/$GENERATE_PY"
 
-write_end_generate
+	write_end_generate
+fi
 
 #======  GENERATE ======
-section "Generations of all $CODE_FILE.cpp..."
+if [ "$ONLY_RUN" == "no" ]
+then
 
-$(python3 "$SCRIPTS_FILE/$GENERATE_PY" $FILE)
+	section "Generations of all $CODE_FILE.cpp..."
 
-	
+	$(python3 "$SCRIPTS_FILE/$GENERATE_PY" $FILE)
+
+fi
+
 #===== COMPILING BENCHS =====
-section "Compiling codes..."
 
 ALL_NAMES=""
 
@@ -341,16 +363,27 @@ do
 	ALL_NAMES="$ALL_NAMES $(get_file_name $fn)"
 done
 
-write_begin_makefile
+if [ "$ONLY_RUN" == "no" ]
+then
 
-clang++ "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native -o "$CODE_FILE/$RUN_FILES/runner.o"
+	section "Compiling codes..."
 
-compile_all
+	write_begin_makefile
+
+	clang++ "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native -o "$CODE_FILE/$RUN_FILES/runner.o"
+
+	compile_all
+fi
 
 #===== RUNING BENCHS =====
 section "Running benchs..."
 
 AVAILABLE_RUN=""
+
+if [ "$ONLY_RUN" == "yes" ]
+then
+	rm $CODE_FILE/$DATA_FILES/*
+fi
 
 cd $CODE_FILE
 touch "$DATA_FILES/time.txt"
@@ -401,7 +434,7 @@ cd ..
 #===== CREATING PDF =====
 section "Creating pdf..."
 
-pdf_name="$CODE_FILE$(get_extension_minmax_params "$FULL_PARAMS").pdf"
+pdf_name="../pdf/$CODE_FILE$(get_extension_minmax_params "$FULL_PARAMS").pdf"
 pdf_bench="$CODE_FILE"
 pdf_proc="AMD RYZEN 5"
 pdf_compil="$COMPILATOR"
@@ -430,6 +463,11 @@ write_plot "set palette defined ( 0 \"#0000FF\", 1 \"#FF0000\" )"
 write_plot "plot '< echo \"16 25\"' w impulse lc rgb \"red\", \"$DATA_FILES/dat.txt\" using (\$$(($n_params+5))+\$$(($n_params+7))):$(($n_params+3)):(\$$(($n_params+9))>$FLOAT_REGISTERS_AVAILABLE?1:0) with circles palette"
 write_plot "quit"
 
+if [ "$ONLY_RUN" == "yes" ] && [ ! -d "$pdf_name" ]
+then
+	rm "$pdf_name"
+fi
+
 if [ "$SILENT" == "yes" ]
 then
 	gnuplot "$DATA_FILES/plot.txt" 2> "$LOG_FILES/gnuplot_log.txt" 1> "$LOG_FILES/gnuplot_log.txt"
@@ -439,5 +477,5 @@ fi
 
 cd ..
 
-evince "$CODE_FILE/$pdf_name" &
+evince "pdf/$CODE_FILE$(get_extension_minmax_params "$FULL_PARAMS").pdf" &
 

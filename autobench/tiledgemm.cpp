@@ -3,7 +3,7 @@
 
 #define BLOCKJ_I (64)
 
-#define BLOCKK_I (256)
+#define BLOCKK_I (128)
 
 #define TILEJ 1
 
@@ -37,11 +37,17 @@ TYPE *vC;
 
 void init_bench()
 {
-  for (int i=0;i<BLOCKI;i++)                                            
+  #pragma clang loop vectorize(disable)
+  for (int i=0;i<BLOCKI;i++)
+    #pragma clang loop vectorize(disable)                                            
     for (int j=0;j<BLOCKJ*TILEJ;j++) vC[i*BLOCKJ*TILEJ+j]=i+j;
-  for (int i=0;i<BLOCKI;i++)                                            
+  #pragma clang loop vectorize(disable)
+  for (int i=0;i<BLOCKI;i++)
+    #pragma clang loop vectorize(disable)                                            
     for (int j=0;j<BLOCKK;j++) vA[i*BLOCKK+j]=i+j;
-  for (int i=0;i<BLOCKK;i++)                                            
+  #pragma clang loop vectorize(disable)
+  for (int i=0;i<BLOCKK;i++)   
+    #pragma clang loop vectorize(disable)                                         
     for (int j=0;j<BLOCKJ*TILEJ;j++) vB[i*BLOCKJ*TILEJ+j]=i+j;
 }
 
@@ -131,7 +137,7 @@ float bench()
       }                                             
     }
    time=__rdtsc()-time;
-    return ((float)(BLOCKI*BLOCKJ*BLOCKK))/((float)time);                                       
+    return ((float)(BLOCKI*BLOCKJ*(BLOCKK+BLOCKK-1)))/((float)time);
   }
 
 

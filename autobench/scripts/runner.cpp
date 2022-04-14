@@ -8,21 +8,16 @@
 using namespace std;
 
 
-template<typename T>
-T v_sum(const vector<T>& v)
+float v_max(vector<float>& v)
 {
-	T sum=v[0];
+	float m=v[0];
 	for(unsigned int i=1;i<v.size();i++)
 	{
-		sum=sum+v[i];
+		if(v[i]>m)
+			m=v[i];
 	}
-	return sum;
-}
-template<typename T>
 
-T v_moy(const vector<T>& v)
-{
-	return (v_sum(v)/((T)v.size()));
+	return m;
 }
 
 #define N_BENCH 50
@@ -33,21 +28,22 @@ int main()
 	init();
 
 	vector<float> time;
+	float tmp_time=0.0;
 
 	for(int b=0;b<N_BENCH;b++)
 	{
 		init_bench();
-		if(b!=0)
-		{
-			time.push_back(bench());
-		}
+
+		tmp_time=bench();
+		time.push_back(tmp_time);
+
 	}
 
-	float moy=v_moy(time);
+	float max_value=v_max(time);
 
 	if(enable())
 	{
-		cout<<moy<<" "<<n_reg_max()<<endl;
+		cout<<max_value<<" "<<n_reg_max()<<endl;
 	}
 	else
 	{
