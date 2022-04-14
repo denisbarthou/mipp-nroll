@@ -3,7 +3,9 @@
 
 REGISTRE_ALLOC_MODE="greedy"
 COMPILATOR="clang++"
-
+pdf_proc="AMD RYZEN 5"
+RUN_OMP_NUM_THREADS="2"
+BOUND_CORE="3"
 
 #fixed params
 
@@ -21,6 +23,9 @@ LOG_FILES="log"
 DATA_FILES="data"
 SILENT="no"
 
+THREADING="none"
+#none, multi or hyper
+
 ALL_NAMES=""
 
 MAKESPACE="	"
@@ -29,6 +34,7 @@ HEAD_GENERATE_PY="base_generate.txt"
 GENERATE_PY="generate.py"
 
 ORANGE_COLOR="\033[1;33m"
+THREAD_COLOR="\033[1;31m"
 NO_COLOR="\033[0m"
 
 RUN_FLOP=""
@@ -212,11 +218,18 @@ function write_begin_makefile()
 	write_makefile "all_llc: $(conc_list "llc/" ".llc" "$ALL_NAMES")"
 	write_makefile ""
 	write_makefile "$LLC_FILES/%.llc: $ALL_CODES_FILE_NAME/%.cpp"
-	write_rule "$COMPILATOR \$< -S -emit-llvm -o \$@ -I.. -finline -march=native -O2"
+	write_rule "$COMPILATOR \$< -S -emit-llvm  -o \$@ -I.. -finline -march=native -O2"
 	write_makefile ""
-	write_makefile "$RUN_FILES/%: $LLC_FILES/%.llc"
-	write_rule "llc -O3 --regalloc=$REGISTRE_ALLOC_MODE $^ -filetype=obj -o \$@.o "
-	write_rule "$COMPILATOR $RUN_FILES/runner.o \$@.o -O3 -o \$@"
+	if [ "$THREADING" == "multi" ] || [ "$THREADING" == "hyper" ]
+	then
+		write_makefile "$RUN_FILES/%: $ALL_CODES_FILE_NAME/%.cpp"
+		write_rule "$COMPILATOR \$< $COMPIL_FLAG_THREAD -c -o \$@.o -I.. -finline -march=native -O2"
+	else
+		write_makefile "$RUN_FILES/%: $LLC_FILES/%.llc"
+		write_rule "llc -O3 --regalloc=$REGISTRE_ALLOC_MODE $^ -filetype=obj -o \$@.o "
+	fi
+
+	write_rule "$COMPILATOR $COMPIL_FLAG_THREAD $RUN_FILES/runner.o \$@.o -O3 -o \$@"
 	write_makefile ""
 }
 
@@ -274,10 +287,7 @@ if [ $# -lt 3 ]
 then
 	echo "usage: >>autobench.sh JINJA_BENCH.cpp NOM_PARAM1 MIN_VALUE_PARAM1 MAX_VALUE_PARAM1 NOM_PARAM12MIN_VALUE_PARAM2 MAX_VALUE_PARAM2 ..."
 	echo "jinja_bench.cpp doit être au format jinja"
-	echo ""
-	echo "jinja_bench.cpp doit print: - \"FLOAT_OP_BY_CYCLES REGISTERS_USED\" si la configuration fonctionne"
-	echo "                              \"none\" si la configuration n'est pas bonne"
-	echo "(La configuration peut ne pas être bonne quand le degré de déroulage d'une matrice n'est pas en accord avec la sa taille)"
+	echo "jinja_bench.cpp doit respecter le header scripts/runner.hpp"
 fi
 
 
@@ -291,11 +301,51 @@ shift
 
 ONLY_RUN="no"
 
-if [ "$1" == "-run" ]
-then
-	ONLY_RUN="yes"
-	shift
-fi
+all_args_tmp=""
+
+COMPIL_FLAG_THREAD=""
+
+for carg in $*
+do
+	opt_arg="no"
+
+	if [ "$carg" == "-run" ]
+	then
+		opt_arg="yes"
+		ONLY_RUN="yes"
+	fi
+
+	if [ "$carg" == "-h" ] || [ "$carg" == "-hyperthreading" ]
+	then
+		opt_arg="yes"
+		THREADING="hyper"
+		COMPIL_FLAG_THREAD="-fopenmp"
+	fi
+
+	if [ "$carg" == "-m" ] || [ "$carg" == "-multithreading" ]
+	then
+		opt_arg="yes"
+		THREADING="multi"
+		COMPIL_FLAG_THREAD="-fopenmp"
+	fi
+
+	if [ "$carg" == "-n" ] || [ "$carg" == "-nothreading" ]
+	then
+		opt_arg="yes"
+		THREADING="none"
+	fi
+
+	if [ "$carg" == "-all" ] || [ "$carg" == "-allthreading" ]
+	then
+		opt_arg="yes"
+		THREADING="all"
+	fi
+
+	if [ "$opt_arg" == "no" ]
+	then
+		all_args_tmp="$all_args_tmp $carg"
+	fi
+done
 
 if [ "$ONLY_RUN" == "no" ]
 then
@@ -328,7 +378,8 @@ then
 fi
 
 
-set_args_mins_max $*
+
+set_args_mins_max $all_args_tmp
 
 
 
@@ -370,7 +421,7 @@ then
 
 	write_begin_makefile
 
-	clang++ "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native -o "$CODE_FILE/$RUN_FILES/runner.o"
+	clang++ "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native $COMPIL_FLAG_THREAD -o "$CODE_FILE/$RUN_FILES/runner.o"
 
 	compile_all
 fi
@@ -393,9 +444,29 @@ touch "$DATA_FILES/max_reg.txt"
 touch "$DATA_FILES/dat.txt"
 touch "$DATA_FILES/plot.txt"
 
+pre_run=""
+
 for run in $ALL_NAMES
 do
-	result=$(./$RUN_FILES/$run)
+	command=""
+
+	if [ "$THREADING" == "hyper" ]
+	then
+		export OMP_NUM_THREADS=2
+		command="hwloc-bind core:$BOUND_CORE ./$RUN_FILES/$run"
+	else
+		if [ "$THREADING" == "multi" ]
+		then
+			export OMP_NUM_THREADS=2
+			command="./$RUN_FILES/$run"
+		else
+			command="./$RUN_FILES/$run"
+		fi
+	fi
+
+	echo "$command"
+	result=$($command)
+	
 	if [ "$(echo "$result" | grep "none")" == "" ]
 	then
 		AVAILABLE_RUN="$AVAILABLE_RUN $run"
@@ -434,9 +505,22 @@ cd ..
 #===== CREATING PDF =====
 section "Creating pdf..."
 
-pdf_name="../pdf/$CODE_FILE$(get_extension_minmax_params "$FULL_PARAMS").pdf"
+pdf_ext_name=""
+pdf_title_threading=""
+
+if [ "$THREADING" == "hyper" ]
+then
+	pdf_title_threading="\nHyperthreading enable"
+	pdf_ext_name="_hyper_threading"
+fi
+if [ "$THREADING" == "multi" ]
+then
+	pdf_title_threading="\nMultithreading enable"
+	pdf_ext_name="_multi_threading"
+fi
+
+pdf_name="$CODE_FILE$(get_extension_minmax_params "$FULL_PARAMS")$pdf_ext_name.pdf"
 pdf_bench="$CODE_FILE"
-pdf_proc="AMD RYZEN 5"
 pdf_compil="$COMPILATOR"
 pdf_compil_version="($($COMPILATOR --version | head -n 1))"
 pdf_alloc="$REGISTRE_ALLOC_MODE"
@@ -451,10 +535,10 @@ done
 cd $CODE_FILE
 
 write_plot "set term pdf"
-write_plot "set output \"$pdf_name\""
+write_plot "set output \"../pdf/$pdf_name\""
 write_plot "set nokey"
 write_plot "unset colorbox"
-write_plot "set title \"$pdf_bench Performance used on $pdf_proc with $pdf_compil / $pdf_alloc \nThe unroll is $FULL_PARAMS \n$pdf_compil_version\""
+write_plot "set title \"$pdf_bench Performance used on $pdf_proc with $pdf_compil / $pdf_alloc \nThe unroll is $FULL_PARAMS $pdf_title_threading\n$pdf_compil_version\""
 write_plot "set ylabel \"Flops [DP]/cycle\""
 write_plot "set xlabel \"registers and spill used\""
 write_plot "set style fill transparent solid 0.3"
@@ -463,9 +547,9 @@ write_plot "set palette defined ( 0 \"#0000FF\", 1 \"#FF0000\" )"
 write_plot "plot '< echo \"16 25\"' w impulse lc rgb \"red\", \"$DATA_FILES/dat.txt\" using (\$$(($n_params+5))+\$$(($n_params+7))):$(($n_params+3)):(\$$(($n_params+9))>$FLOAT_REGISTERS_AVAILABLE?1:0) with circles palette"
 write_plot "quit"
 
-if [ "$ONLY_RUN" == "yes" ] && [ ! -d "$pdf_name" ]
+if [ "$ONLY_RUN" == "yes" ] && [ ! -d "../pdf/$pdf_name" ]
 then
-	rm "$pdf_name"
+	rm "../pdf/$pdf_name"
 fi
 
 if [ "$SILENT" == "yes" ]
@@ -477,5 +561,16 @@ fi
 
 cd ..
 
-evince "pdf/$CODE_FILE$(get_extension_minmax_params "$FULL_PARAMS").pdf" &
+evince "pdf/$pdf_name" &
 
+if [ "$THREADING" == "all" ]
+then
+	echo ""
+	echo -e "$THREAD_COLOR === HYPER THREADING === $NO_COLOR"
+	echo ""
+	./autobench.sh "$FILE" $FULL_PARAMS -h
+	echo ""
+	echo -e "$THREAD_COLOR === MULTI THREADING === $NO_COLOR"
+	echo ""
+	./autobench.sh "$FILE" $FULL_PARAMS -run -m
+fi
