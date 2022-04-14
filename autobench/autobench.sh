@@ -1,11 +1,13 @@
 #!/bin/bash
 
-
+FLOAT_REGISTERS_AVAILABLE="16"
 REGISTRE_ALLOC_MODE="greedy"
 COMPILATOR="clang++"
-pdf_proc="AMD RYZEN 5"
 RUN_OMP_NUM_THREADS="2"
 BOUND_CORE="3"
+
+pdf_proc="AMD RYZEN 5"
+pdf_hight="2"
 
 #fixed params
 
@@ -524,7 +526,7 @@ pdf_bench="$CODE_FILE"
 pdf_compil="$COMPILATOR"
 pdf_compil_version="($($COMPILATOR --version | head -n 1))"
 pdf_alloc="$REGISTRE_ALLOC_MODE"
-FLOAT_REGISTERS_AVAILABLE="16"
+
 
 n_params="0"
 for p in $PARAMS
@@ -544,7 +546,7 @@ write_plot "set xlabel \"registers and spill used\""
 write_plot "set style fill transparent solid 0.3"
 write_plot "set style circle radius 0.3"
 write_plot "set palette defined ( 0 \"#0000FF\", 1 \"#FF0000\" )"
-write_plot "plot '< echo \"16 25\"' w impulse lc rgb \"red\", \"$DATA_FILES/dat.txt\" using (\$$(($n_params+5))+\$$(($n_params+7))):$(($n_params+3)):(\$$(($n_params+9))>$FLOAT_REGISTERS_AVAILABLE?1:0) with circles palette"
+write_plot "plot '< echo \"$FLOAT_REGISTERS_AVAILABLE $pdf_hight\"' w impulse lc rgb \"red\", \"$DATA_FILES/dat.txt\" using (\$$(($n_params+5))+\$$(($n_params+7))):$(($n_params+3)):(\$$(($n_params+9))>$FLOAT_REGISTERS_AVAILABLE?1:0) with circles palette"
 write_plot "quit"
 
 if [ "$ONLY_RUN" == "yes" ] && [ ! -d "../pdf/$pdf_name" ]
