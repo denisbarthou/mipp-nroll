@@ -1,0 +1,399 @@
+@InProceedings{c3po2020,
+author="Nguyen, Van Man
+and Saillard, Emmanuelle
+and Jaeger, Julien
+and Barthou, Denis
+and Carribault, Patrick",
+editor="Jagode, Heike
+and Anzt, Hartwig
+and Juckeland, Guido
+and Ltaief, Hatem",
+title="Automatic Code Motion to Extend MPI Nonblocking Overlap Window",
+booktitle="High Performance Computing",
+year="2020",
+publisher="Springer International Publishing",
+address="Cham",
+pages="43--54",
+abstract="HPC applications rely on a distributed-memory parallel programming model to improve the overall execution time. This leads to spawning multiple processes that need to communicate with each other to make the code progress. But these communications involve overheads caused by network latencies or synchronizations between processes. One possible approach to reduce those overheads is to overlap communications with computations. MPI allows this solution through its nonblocking communication mode: a nonblocking communication is composed of an initialization and a completion call. It is then possible to overlap the communication by inserting computations between these two calls. The use of nonblocking collective calls is however still marginal and adds a new layer of complexity. In this paper we propose an automatic static optimization that (i) transforms blocking MPI communications into their nonblocking counterparts and (ii) performs extensive code motion to increase the size of overlapping intervals between initialization and completion calls. Our method is implemented in LLVM as a compilation pass, and shows promising results on two mini applications.",
+isbn="978-3-030-59851-8"
+}
+
+@INPROCEEDINGS{correctness2020,
+  author={V. M. {Nguyen} and E. {Saillard} and J. {Jaeger} and D. {Barthou} and P. {Carribault}},
+  booktitle={2020 IEEE/ACM 4th International Workshop on Software Correctness for HPC Applications (Correctness)}, 
+  title={PARCOACH Extension for Static MPI Nonblocking and Persistent Communication Validation}, 
+  year={2020},
+  volume={},
+  number={},
+  pages={31-39},
+  doi={10.1109/Correctness51934.2020.00009}
+}
+
+@article{clement1995,
+  title={{Overlapping Computations, Communications and I/O in Parallel Sorting}},
+  author={Clement, Mark J and Quinn, Michael J},
+  journal={Journal of Parallel and Distributed Computing},
+  volume={28},
+  number={2},
+  pages={162--172},
+  year={1995},
+  publisher={Elsevier}
+}
+
+@article{heroux2009,
+  title={{Improving Performance via Mini-Applications}},
+  author={Heroux, Michael A and Doerfler, Douglas W and Crozier, Paul S and Willenbring, James M and Edwards, H Carter and Williams, Alan and Rajan, Mahesh and Keiter, Eric R and Thornquist, Heidi K and Numrich, Robert W},
+  journal={Sandia National Laboratories, Tech. Rep. SAND2009-5574},
+  volume={3},
+  year={2009}
+}
+
+@misc{url-minimd,
+  title = {mini{MD} github repository},
+  key = {miniMD github repository},
+  howpublished = {\url{https://github.com/Mantevo/miniMD}},
+  note = {Accessed: 2020-03-31}
+}
+
+@misc{url-minife,
+  title = {mini{FE} github repository},
+  key = {miniFE github respository},
+  howpublished = {\url{https://github.com/Mantevo/miniFE}},
+  note = {Accessed: 2020-03-31}
+}
+
+@INPROCEEDINGS{denis2016,
+author={A. {Denis} and F. {Trahay}},
+booktitle={2016 45th International Conference on Parallel Processing (ICPP)}, title={{MPI Overlap: Benchmark and Analysis}},
+year={2016},
+volume={},
+number={},
+pages={258-267},
+}
+
+@techreport{hoefler-libnbc,
+  author={Torsten Hoefler and Andrew Lumsdaine},
+  title={{Design, Implementation, and Usage of LibNBC}},
+  institution={Open Systems Lab, Indiana University},
+  year={2006},
+  month={Aug.},
+  location={Bloomington, IN, USA},
+  publisher={School of Informatics},
+  source={http://www.unixer.de/~htor/publications/},
+}
+
+@inproceedings{kandalla2012,
+  title={{Can Network-Offload Based Non-Blocking Neighborhood MPI Collectives Improve Communication Overheads of Irregular Graph Algorithms?}},
+  author={Kandalla, K and Bulu{\c{c}}, Aydin and Subramoni, Hari and Tomko, Karen and Vienne, J{\'e}r{\^o}me and Oliker, Leonid and Panda, Dhabaleswar K},
+  booktitle={2012 IEEE International Conference on Cluster Computing Workshops},
+  pages={222--230},
+  year=2012,
+  organization={IEEE}
+}
+
+@inproceedings{hoefler2006,
+  title={{Optimizing a Conjugate Gradient Solver with Non-Blocking Collective Operations}},
+  author={Hoefler, Torsten and Gottschling, Peter and Rehm, Wolfgang and Lumsdaine, Andrew},
+  booktitle={European Parallel Virtual Machine/Message Passing Interface Users’ Group Meeting},
+  pages={374--382},
+  year=2006,
+  organization={Springer}
+}
+
+@article{song2016,
+  title={{Computation--Communication Overlap and Parameter Auto-Tuning for Scalable Pparallel 3-D FFT}},
+  author={Song, Sukhyun and Hollingsworth, Jeffrey K},
+  journal={Journal of computational science},
+  volume={14},
+  pages={38--50},
+  year={2016},
+  publisher={Elsevier}
+}
+
+@inproceedings{danalis2009,
+  title={{MPI-Aware Compiler Optimizations for Improving Communication--Computation Overlap}},
+  author={Danalis, Anthony and Pollock, Lori and Swany, Martin and Cavazos, John},
+  booktitle={Proceedings of the 23rd international conference on Supercomputing},
+  pages={316--325},
+  year={2009}
+}
+
+@inproceedings{danalis2007,
+  title={{Automatic MPI Application Transformation with ASPhALT}},
+  author={Danalis, Anthony and Pollock, Lori and Swany, Martin},
+  booktitle={2007 IEEE International Parallel and Distributed Processing Symposium},
+  pages={1--8},
+  year={2007},
+  organization={IEEE}
+}
+
+@inproceedings{das2008,
+  title={{Compiler--Controlled Extraction of Computation--Communication Overlap in MPI Applications}},
+  author={Das, Dibyendu and Gupta, Manish and Ravindran, Rajan and Shivani, W and Sivakeshava, P and Uppal, Rishabh},
+  booktitle={2008 IEEE International Symposium on Parallel and Distributed Processing},
+  pages={1--8},
+  year={2008},
+  organization={IEEE}
+}
+
+@inproceedings{guo2016,
+  title={{Compiler--Assisted Overlapping of Communication and Computation in MPI Applications}},
+  author={Guo, Jichi and Yi, Qing and Meng, Jiayuan and Zhang, Junchao and Balaji, Pavan},
+  booktitle={2016 IEEE International Conference on Cluster Computing (CLUSTER)},
+  pages={60--69},
+  year={2016},
+  organization={IEEE}
+}
+
+@article{quinlan2000,
+  title={{ROSE: Compiler Support for Object--Oriented Frameworks}},
+  author={Quinlan, Dan},
+  journal={Parallel Processing Letters},
+  volume={10},
+  number={02n03},
+  pages={215--226},
+  year={2000},
+  publisher={World Scientific}
+}
+
+@inproceedings{ahmed2017,
+  title={{Transforming Blocking MPI Collectives to Non-Blocking and Persistent Operations}},
+  author={Ahmed, Hadia and Skjellum, Anthony and Bangalore, Purushotham and Pirkelbauer, Peter},
+  booktitle={Proceedings of the 24th European MPI Users' Group Meeting},
+  pages={1--11},
+  year={2017}
+}
+
+@inproceedings{lattner2004,
+  title={{LLVM: A Compilation Framework for Lifelong Program Analysis \& Transformation}},
+  author={Lattner, Chris and Adve, Vikram},
+  booktitle={International Symposium on Code Generation and Optimization, 2004. CGO 2004.},
+  pages={75--86},
+  year={2004},
+  organization={IEEE}
+}
+
+@inproceedings{slice85-a, author = {Weiser, Mark}, title = {{Program Slicing}}, year = {1981}, isbn = {0897911466}, publisher = {IEEE Press}, booktitle = {Proceedings of the 5th International Conference on Software Engineering}, pages = {439?449}, numpages = {11}, keywords = {Debugging, Program maintenance, Human factors, Data flow analysis, Program metrics, Software tools}, location = {San Diego, California, USA}, series = {ICSE ?81} }
+
+@inproceedings{slice85,
+author = {Weiser, Mark},
+title = {{Program Slicing}},
+year = {1981},
+isbn = {0897911466},
+publisher = {IEEE Press},
+booktitle = {Proceedings of the 5th International Conference on Software Engineering},
+pages = {439–449},
+numpages = {11},
+keywords = {Debugging, Data flow analysis, Software tools, Human factors, Program metrics, Program maintenance},
+location = {San Diego, California, USA},
+series = {ICSE ’81}
+}
+
+@inproceedings{slice12-a, 
+author = {Jaffar, Joxan and Murali, Vijayaraghavan and Navas, Jorge A. and Santosa, Andrew E.}, title = {{Path--Sensitive Backward Slicing}}, year = {2012}, isbn = {9783642331244}, publisher = {Springer-Verlag}, address = {Berlin, Heidelberg}, url = {https://doi.org/10.1007/978-3-642-33125-1_17}, doi = {10.1007/978-3-642-33125-1_17}, booktitle = {Proceedings of the 19th International Conference on Static Analysis}, pages = {231?247}, numpages = {17}, location = {Deauville, France}, series = {SAS?12} }
+
+@InProceedings{slice12,
+author="Jaffar, Joxan
+and Murali, Vijayaraghavan
+and Navas, Jorge A.
+and Santosa, Andrew E.",
+editor="Min{\'e}, Antoine
+and Schmidt, David",
+title="Path-Sensitive Backward Slicing",
+booktitle="Static Analysis",
+year="2012",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="231--247",
+abstract="Backward slicers are typically path-insensitive (i.e., they ignore the evaluation of predicates at conditional branches) often producing too big slices. Though the effect of path-sensitivity is always desirable, the major challenge is that there are, in general, an exponential number of predicates to be considered. We present a path-sensitive backward slicer and demonstrate its practicality with real C programs. The crux of our method is a symbolic execution-based algorithm that excludes spurious dependencies lying on infeasible paths and avoids imprecise joins at merging points while reusing dependencies already computed by other paths, thus pruning the search space significantly.",
+isbn="978-3-642-33125-1"
+}
+
+@book{mpi2015,
+  title={MPI: A Message-passing Interface Standard, Version 3.1 ; June 4, 2015},
+  author={Message Passing Interface Forum},
+  url={https://www.mpi-forum.org/docs/mpi-3.1/mpi31-report.pdf},
+  year={2015},
+}
+
+@incollection{marmot2004,
+  title={MARMOT: An MPI analysis and checking tool},
+  author={Krammer, Bettina and Bidmon, Katrin and M{\"u}ller, Matthias S and Resch, Michael M},
+  booktitle={Advances in Parallel Computing},
+  volume={13},
+  pages={493--500},
+  year={2004},
+  publisher={Elsevier}
+}
+
+@article{must2013,
+  title={MPI runtime error detection with MUST: advances in deadlock detection},
+  author={Hilbrich, Tobias and Protze, Joachim and Schulz, Martin and de Supinski, Bronis R and M{\"u}ller, Matthias S},
+  journal={Scientific Programming},
+  volume={21},
+  number={3-4},
+  pages={109--121},
+  year={2013},
+  publisher={IOS Press}
+}
+
+@inproceedings{umpire2000,
+  title={Dynamic software testing of MPI applications with Umpire},
+  author={Vetter, Jeffrey S and De Supinski, Bronis R},
+  booktitle={SC'00: Proceedings of the 2000 ACM/IEEE Conference on Supercomputing},
+  pages={51--51},
+  year={2000},
+  organization={IEEE}
+}
+
+@inproceedings{parcoach2018,
+  title={PARCOACH extension for a full-interprocedural collectives verification},
+  author={Huchant, Pierre and Saillard, Emmanuelle and Barthou, Denis and Brunie, Hugo and Carribault, Patrick},
+  booktitle={2018 IEEE/ACM 2nd International Workshop on Software Correctness for HPC Applications (Correctness)},
+  pages={69--76},
+  year={2018},
+  organization={IEEE}
+}
+@inproceedings{parcoach2019,
+  title={Multi-Valued Expression Analysis for Collective Checking},
+  author={Huchant, Pierre and Saillard, Emmanuelle and Barthou, Denis and Carribault, Patrick},
+  booktitle={Euro-Par 2019: Parallel Processing},
+  pages={29--43},
+  year={2019}
+}
+
+@inproceedings{parcoach2015,
+  TITLE = {{Correctness Analysis of MPI-3 Non-Blocking Communications in PARCOACH}},
+  AUTHOR = {Jaeger, Julien and Saillard, Emmanuelle and Carribault, Patrick and Barthou, Denis},
+  BOOKTITLE = {{European MPI Users' Group Meeting }},
+  ADDRESS = {Bordeaux, France},
+  SERIES = { EuroMPI '15 The 22nd European MPI Users' Group Meeting },
+  YEAR = {2015},
+  MONTH = Sep
+}
+
+
+
+@inproceedings{droste2015,
+  title={MPI-checker: Static Analysis for MPI},
+  author={Droste, Alexander and Kuhn, Michael and Ludwig, Thomas},
+  booktitle={Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC},
+  pages={1--10},
+  year={2015}
+}
+
+@inproceedings{gupta1992,
+  title={Generalized dominators and post-dominators},
+  author={Gupta, Rajiv},
+  booktitle={Proceedings of the 19th ACM SIGPLAN-SIGACT symposium on Principles of programming languages},
+  pages={246--257},
+  year={1992}
+}
+
+@incollection{sreedhar1994,
+  title={DJ-graphs and their applications to flowgraph analyses},
+  author={Sreedhar, Vugranam C and Gao, Guang R and Lee, Yongfong},
+  booktitle={ACAPS Tech. Memo 70},
+  year={1994},
+  publisher={Citeseer}
+}
+
+@inproceedings{cytron1989,
+author = {Cytron, R. and Ferrante, J. and Rosen, B. K. and Wegman, M. N. and Zadeck, F. K.},
+title = {An Efficient Method of Computing Static Single Assignment Form},
+year = {1989},
+isbn = {0897912942},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/75277.75280},
+doi = {10.1145/75277.75280},
+booktitle = {Proceedings of the 16th ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+pages = {25–35},
+numpages = {11},
+location = {Austin, Texas, USA},
+series = {POPL ’89}
+}
+
+@inproceedings{ye2018, 
+author = {Ye, Fangke and Zhao, Jisheng and Sarkar, Vivek}, 
+title = {Detecting MPI Usage Anomalies via Partial Program Symbolic Execution}, 
+year = {2018}, 
+publisher = {IEEE Press}, 
+url = {https://doi.org/10.1109/SC.2018.00066}, 
+doi = {10.1109/SC.2018.00066}, 
+booktitle = {Proceedings of the International Conference for High Performance Computing, Networking, Storage, and Analysis}, articleno = {63}, 
+numpages = {5}, 
+keywords = {symbolic execution, MPI, anomaly detection}, 
+location = {Dallas, Texas}, 
+series = {SC ’18} }
+
+@inproceedings{simgrid2017, 
+author = {Pham, Anh and J\'{e}ron, Thierry and Quinson, Martin}, 
+title = {Verifying MPI Applications with SimGridMC}, year = {2017}, 
+isbn = {9781450351270}, publisher = {Association for Computing Machinery}, address = {New York, NY, USA}, 
+url = {https://doi.org/10.1145/3145344.3145345}, doi = {10.1145/3145344.3145345}, 
+booktitle = {Proceedings of the First International Workshop on Software Correctness for HPC Applications}, 
+pages = {28–33}, 
+numpages = {6}, 
+location = {Denver, CO, USA}, 
+series = {Correctness’17} }
+
+@Inproceedings{civl2015,
+  author = {Stephen F.\ Siegel and Manchun Zheng and Ziqing Luo and
+            Timothy K.\ Zirkel and Andre V.\ Marianiello and John G.\ Edenhofner
+            and Matthew B.\ Dwyer and Michael S.\ Rogers},
+  title = {{CIVL}: The Concurrency Intermediate Verification Language},
+  booktitle = {SC15: International Conference for High Performance
+               Computing, Networking, Storage and Analysis, Proceedings},
+  series = {SC '15},
+  year = {2015},
+  month = {Nov},
+  publisher = {IEEE Press},
+  address = {Piscataway, NJ, USA},
+  pages = {61:1-61:12}
+}
+@inproceedings{civl2017, author = {Luo, Ziqing and Zheng, Manchun and Siegel, Stephen F.}, title = {Verification of MPI Programs Using CIVL}, year = {2017}, isbn = {9781450348492}, publisher = {Association for Computing Machinery}, address = {New York, NY, USA}, url = {https://doi.org/10.1145/3127024.3127032}, doi = {10.1145/3127024.3127032}, booktitle = {Proceedings of the 24th European MPI Users’ Group Meeting}, articleno = {6}, numpages = {11}, keywords = {model checking, verification, MPI, CIVL, symbolic execution}, location = {Chicago, Illinois}, series = {EuroMPI ’17} }
+
+
+@inproceedings{mpisv2018, 
+author = {Yu, Hengbiao}, 
+title = {Combining Symbolic Execution and Model Checking to Verify MPI Programs}, 
+year = {2018}, isbn = {9781450356633}, publisher = {Association for Computing Machinery}, 
+address = {New York, NY, USA}, 
+url = {https://doi.org/10.1145/3183440.3190336}, 
+doi = {10.1145/3183440.3190336}, booktitle = {Proceedings of the 40th International Conference on Software Engineering: Companion Proceeedings}, 
+pages = {527–530}, 
+numpages = {4}, 
+keywords = {symbolic execution, verification, model checking, MPI}, 
+location = {Gothenburg, Sweden}, 
+series = {ICSE ’18} }
+
+@inproceedings{mpisv2020, 
+author = {Yu, Hengbiao and Chen, Zhenbang and Fu, Xianjin and Wang, Ji and Su, Zhendong and Sun, Jun and Huang, Chun and Dong, Wei}, 
+title = {Symbolic Verification of Message Passing Interface Programs},
+year = {2020},
+location = {Seoul, South Korea}, 
+series = {ICSE ’20} 
+}
+
+@inproceedings{dampi2010, author = {Vo, Anh and Aananthakrishnan, Sriram and Gopalakrishnan, Ganesh and Supinski, Bronis R. de and Schulz, Martin and Bronevetsky, Greg}, title = {A Scalable and Distributed Dynamic Formal Verifier for MPI Programs}, year = {2010}, isbn = {9781424475599}, publisher = {IEEE Computer Society}, address = {USA}, url = {https://doi.org/10.1109/SC.2010.7}, doi = {10.1109/SC.2010.7}, booktitle = {Proceedings of the 2010 ACM/IEEE International Conference for High Performance Computing, Networking, Storage and Analysis}, pages = {1–10}, numpages = {10}, series = {SC ’10} }
+  
+@techreport{lulesh,
+  title={Lulesh 2.0 updates and changes},
+  author={Karlin, Ian and Keasler, Jeff and Neely, JR},
+  year={2013},
+  institution={Lawrence Livermore National Lab.(LLNL), Livermore, CA (United States)}
+}
+
+@article{lammps,
+  title={Fast parallel algorithms for short-range molecular dynamics},
+  author={Plimpton, Steve},
+  journal={Journal of computational physics},
+  volume={117},
+  number={1},
+  pages={1--19},
+  year={1995},
+  publisher={Elsevier},
+  url={http://lammps.sandia.gov}
+}
+
