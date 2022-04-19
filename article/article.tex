@@ -1,0 +1,71 @@
+%===========================================================
+%                              Choix de thématique
+%===========================================================
+% Une des quatre options 'parallelisme', 'architecture', 'systeme' 
+% 'tempsreel' doit être utilisée avec le style compas2021
+\documentclass[sigconf,review,anonymous]{acmart}
+
+\usepackage{listings}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm,hhline}
+
+\usepackage{wrapfig}
+
+\usepackage{color}
+
+\definecolor{light-gray}{gray}{0.80}
+%===========================================================
+%                               Title
+%===========================================================
+
+\begin{document}
+\bibliographystyle{plain}
+
+\lstset{
+  language=C,
+  basicstyle=\tiny\ttfamily,
+%  numbers=left,
+%  xleftmargin=2em,
+  frame=single,
+%  framexleftmargin=2em,
+  escapeinside={(*}{*)}
+}
+
+\title{Exploring Vectorization and unrolling with SMT}
+
+\author{Denis Barthou}
+\affiliation{Inria Bordeaux Sud-Ouest, Bordeaux, France}
+\affiliation{Bordeaux Institute of Technology, Université de Bordeaux, LaBRI, Bordeaux, France}
+
+\author{Edgar Baucher}
+\affiliation{Bordeaux Institute of Technology, Bordeaux France}
+
+\author{Ahmed-Manaf Dhamani}
+\affiliation{Bordeaux Institute of Technology, Bordeaux France}
+\author{William Jalby}
+\affiliation{University of Versailles St Quentin, France}
+
+
+%\date{\today}
+
+%===========================================================         %
+%Abstract
+%===========================================================  
+\begin{abstract}
+  
+\end{abstract}
+\keywords{}
+
+\maketitle
+
+
+
+\section{Introduction}
+\section{Related Works}
+\section{Conclusion}
+\label{sec:conclusion}
+
+\bibliography{biblio}
+
+\end{document}
