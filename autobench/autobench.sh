@@ -8,6 +8,7 @@
 FLOAT_REGISTERS_AVAILABLE="16"
 REGISTRE_ALLOC_MODE="greedy"
 COMPILATOR="clang++"
+WFLAGS="-finline -std=c++17"
 RUN_OMP_NUM_THREADS="2"
 BOUND_CORE="3"
 
@@ -231,12 +232,12 @@ function write_begin_makefile()
 	write_makefile "all_llc: $(conc_list "llc/" ".llc" "$ALL_NAMES")"
 	write_makefile ""
 	write_makefile "$LLC_FILES/%.llc: $ALL_CODES_FILE_NAME/%.cpp"
-	write_rule "$COMPILATOR \$< -S -emit-llvm  -o \$@ -I.. -finline -march=native -O2"
+	write_rule "$COMPILATOR \$< -S -emit-llvm  -o \$@ -I.. $WFLAGS -march=native -O2"
 	write_makefile ""
-	if [ "$THREADING" == "multi" ] || [ "$THREADING" == "hyper" ]
+	if [ "$THREADING" == "multi" ] || [ "$THREADING" == "hyper" ] || [ "$(echo $COMPILATOR | grep "clang")" == "" ]
 	then
 		write_makefile "$RUN_FILES/%: $ALL_CODES_FILE_NAME/%.cpp"
-		write_rule "$COMPILATOR \$< $COMPIL_FLAG_THREAD -c -o \$@.o -I.. -finline -march=native -O2"
+		write_rule "$COMPILATOR \$< $COMPIL_FLAG_THREAD -c -o \$@.o -I.. $WFLAGS -march=native -O2"
 	else
 		write_makefile "$RUN_FILES/%: $LLC_FILES/%.llc"
 		write_rule "llc -O3 --regalloc=$REGISTRE_ALLOC_MODE $^ -filetype=obj -o \$@.o "
@@ -434,7 +435,7 @@ then
 
 	write_begin_makefile
 
-	clang++ "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native $COMPIL_FLAG_THREAD -o "$CODE_FILE/$RUN_FILES/runner.o"
+	$COMPILATOR	 "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native $COMPIL_FLAG_THREAD -o "$CODE_FILE/$RUN_FILES/runner.o"
 
 	compile_all
 fi
