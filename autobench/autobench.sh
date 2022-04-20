@@ -234,7 +234,7 @@ function write_begin_makefile()
 	write_makefile "$LLC_FILES/%.llc: $ALL_CODES_FILE_NAME/%.cpp"
 	write_rule "$COMPILATOR \$< -S -emit-llvm  -o \$@ -I.. $WFLAGS -march=native -O2"
 	write_makefile ""
-	if [ "$THREADING" == "multi" ] || [ "$THREADING" == "hyper" ]
+	if [ "$THREADING" == "multi" ] || [ "$THREADING" == "hyper" ] || [ "$(echo $COMPILATOR | grep "clang")" == "" ]
 	then
 		write_makefile "$RUN_FILES/%: $ALL_CODES_FILE_NAME/%.cpp"
 		write_rule "$COMPILATOR \$< $COMPIL_FLAG_THREAD -c -o \$@.o -I.. $WFLAGS -march=native -O2"
@@ -435,7 +435,7 @@ then
 
 	write_begin_makefile
 
-	clang++ "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native $COMPIL_FLAG_THREAD -o "$CODE_FILE/$RUN_FILES/runner.o"
+	$COMPILATOR	 "$SCRIPTS_FILE/runner.cpp" -c -finline -march=native $COMPIL_FLAG_THREAD -o "$CODE_FILE/$RUN_FILES/runner.o"
 
 	compile_all
 fi
