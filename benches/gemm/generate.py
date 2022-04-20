@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # Vector size
-VSIZE=8
+VSIZE=2
 VNUMBER=32
 BI=64
 BJ=64
