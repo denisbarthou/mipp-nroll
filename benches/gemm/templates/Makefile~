@@ -1,0 +1,49 @@
+SRCS={{ opt.srcs }}
+%.gcc.o: %.cpp
+	g++ $^ -c -I.. -fpermissive -fPIC -DMIPP_ALIGNED_LOADS -finline -march=native -O3 -o $@ 
+%.icc.o: %.cpp
+	icpc $^ -c -I.. -fPIC -DMIPP_ALIGNED_LOADS -qopt-zmm-usage=high -inline-forceinline -finline -march=native -O3 -o $@ 
+%.ll: %.cpp
+	clang++ $^ -S -emit-llvm -o $@ -I.. -fPIC -finline -march=native -O2 #-DLIKWID_PERFMON
+%.pbqp.o:%.ll
+	llc -O3 --regalloc=pbqp --relocation-model=pic $^ -filetype=obj -o $@
+%.greedy.o:%.ll
+	llc -O3 --regalloc=greedy --relocation-model=pic $^ -filetype=obj -o $@
+%.basic.o:%.ll
+	llc -O3 --regalloc=basic --relocation-model=pic $^ -filetype=obj -o $@
+%.reg: %.o
+	@objdump -d $^|sed -e 's/%\({{ opt.prefix }}[0-9]*\)/\n@\1\n/g'|grep "@"| sort -u|wc -l|xargs -I{} echo `basename $^ .o`" {}" > $@
+%.spill: %.o
+	@objdump -d $^|grep rsp|grep \%{{ opt.prefix }}|sed -e 's/.*[ ,]\([^ ]*\)(\%rsp).*/\1/'|sort -u|wc -l|xargs -I{} echo `basename $^ .o`" {}" > $@
+rdtsc.o: rdtsc.c
+	gcc -o $@ -c $^ -fPIC
+../libkernels.icc.so: $(SRCS:.cpp=.icc.o)
+	icpc -shared $^ -o $@
+../libkernels.gcc.so: $(SRCS:.cpp=.gcc.o) rdtsc.o
+	g++ -shared $^ -o $@
+../libkernels.pbqp.so: $(SRCS:.cpp=.pbqp.o)
+	clang++ -shared $^ -o $@ #-DLIKWID_PERFMON -llikwid
+../libkernels.greedy.so: $(SRCS:.cpp=.greedy.o)
+	clang++ -shared $^ -o $@ 
+../libkernels.basic.so: $(SRCS:.cpp=.basic.o)
+	clang++ -shared $^ -o $@ #-DLIKWID_PERFMON -llikwid
+../icc.reg: $(SRCS:.cpp=.icc.reg)
+	cat $^ > $@
+../icc.spill: $(SRCS:.cpp=.icc.spill)
+	cat $^ > $@
+../gcc.reg: $(SRCS:.cpp=.gcc.reg)
+	cat $^ > $@
+../gcc.spill: $(SRCS:.cpp=.gcc.spill)
+	cat $^ > $@
+../basic.reg: $(SRCS:.cpp=.basic.reg)
+	cat $^ > $@
+../basic.spill: $(SRCS:.cpp=.basic.spill)
+	cat $^ > $@
+../greedy.reg: $(SRCS:.cpp=.greedy.reg)
+	cat $^ > $@
+../greedy.spill: $(SRCS:.cpp=.greedy.spill)
+	cat $^ > $@
+../pbqp.reg: $(SRCS:.cpp=.pbqp.reg)
+	cat $^ > $@
+../pbqp.spill: $(SRCS:.cpp=.pbqp.spill)
+	cat $^ > $@
