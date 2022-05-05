@@ -1,0 +1,1581 @@
+; ModuleID = 'codes/matvec_ui4_uk14.cpp'
+source_filename = "codes/matvec_ui4_uk14.cpp"
+target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
+target triple = "x86_64-pc-linux-gnu"
+
+%"class.std::ios_base::Init" = type { i8 }
+%"class.std::__cxx11::basic_string" = type { %"struct.std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider", i64, %union.anon }
+%"struct.std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_Alloc_hider" = type { i8* }
+%union.anon = type { i64, [8 x i8] }
+
+$_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_ = comdat any
+
+@_ZStL8__ioinit = internal global %"class.std::ios_base::Init" zeroinitializer, align 1
+@__dso_handle = external hidden global i8
+@_ZN4mippL15InstructionTypeB5cxx11E = internal global %"class.std::__cxx11::basic_string" zeroinitializer, align 8
+@.str = private unnamed_addr constant [4 x i8] c"AVX\00", align 1
+@_ZN4mippL19InstructionFullTypeB5cxx11E = internal global %"class.std::__cxx11::basic_string" zeroinitializer, align 8
+@.str.3 = private unnamed_addr constant [2 x i8] c"2\00", align 1
+@_ZN4mippL18InstructionVersionB5cxx11E = internal global %"class.std::__cxx11::basic_string" zeroinitializer, align 8
+@_ZL6BLOCKI = internal unnamed_addr global i32 256, align 4
+@_ZL6BLOCKK = internal unnamed_addr global i32 256, align 4
+@_ZL2vA = internal unnamed_addr global float* null, align 8
+@_ZL2vB = internal unnamed_addr global float* null, align 8
+@_ZL2vC = internal unnamed_addr global float* null, align 8
+@.str.5 = private unnamed_addr constant [42 x i8] c"basic_string::_M_construct null not valid\00", align 1
+@.str.6 = private unnamed_addr constant [21 x i8] c"basic_string::append\00", align 1
+@llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_matvec_ui4_uk14.cpp, i8* null }]
+
+declare dso_local void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"*) unnamed_addr #0
+
+; Function Attrs: nounwind
+declare dso_local void @_ZNSt8ios_base4InitD1Ev(%"class.std::ios_base::Init"*) unnamed_addr #1
+
+; Function Attrs: nofree nounwind
+declare dso_local i32 @__cxa_atexit(void (i8*)*, i8*, i8*) local_unnamed_addr #2
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.start.p0i8(i64 immarg, i8* nocapture) #3
+
+declare dso_local i32 @__gxx_personality_v0(...)
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.lifetime.end.p0i8(i64 immarg, i8* nocapture) #3
+
+; Function Attrs: nounwind uwtable
+declare dso_local void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED2Ev(%"class.std::__cxx11::basic_string"*) unnamed_addr #4 align 2
+
+; Function Attrs: inlinehint uwtable
+define linkonce_odr dso_local void @_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_(%"class.std::__cxx11::basic_string"* noalias sret %0, %"class.std::__cxx11::basic_string"* dereferenceable(32) %1, i8* %2) local_unnamed_addr #5 comdat personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
+  %4 = alloca i64, align 8
+  %5 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %0, i64 0, i32 2
+  %6 = bitcast %"class.std::__cxx11::basic_string"* %0 to %union.anon**
+  store %union.anon* %5, %union.anon** %6, align 8, !tbaa !2
+  %7 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %1, i64 0, i32 0, i32 0
+  %8 = load i8*, i8** %7, align 8, !tbaa !7
+  %9 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %1, i64 0, i32 1
+  %10 = load i64, i64* %9, align 8, !tbaa !10
+  %11 = icmp ne i8* %8, null
+  %12 = icmp eq i64 %10, 0
+  %13 = or i1 %11, %12
+  br i1 %13, label %15, label %14
+
+14:                                               ; preds = %3
+  tail call void @_ZSt19__throw_logic_errorPKc(i8* getelementptr inbounds ([42 x i8], [42 x i8]* @.str.5, i64 0, i64 0)) #18
+  unreachable
+
+15:                                               ; preds = %3
+  %16 = bitcast %union.anon* %5 to i8*
+  %17 = bitcast i64* %4 to i8*
+  call void @llvm.lifetime.start.p0i8(i64 8, i8* nonnull %17) #10
+  store i64 %10, i64* %4, align 8, !tbaa !11
+  %18 = icmp ugt i64 %10, 15
+  br i1 %18, label %19, label %24
+
+19:                                               ; preds = %15
+  %20 = call i8* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm(%"class.std::__cxx11::basic_string"* nonnull %0, i64* nonnull dereferenceable(8) %4, i64 0)
+  %21 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %0, i64 0, i32 0, i32 0
+  store i8* %20, i8** %21, align 8, !tbaa !7
+  %22 = load i64, i64* %4, align 8, !tbaa !11
+  %23 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %0, i64 0, i32 2, i32 0
+  store i64 %22, i64* %23, align 8, !tbaa !12
+  br label %24
+
+24:                                               ; preds = %19, %15
+  %25 = phi i8* [ %20, %19 ], [ %16, %15 ]
+  %26 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %0, i64 0, i32 0, i32 0
+  switch i64 %10, label %29 [
+    i64 1, label %27
+    i64 0, label %30
+  ]
+
+27:                                               ; preds = %24
+  %28 = load i8, i8* %8, align 1, !tbaa !12
+  store i8 %28, i8* %25, align 1, !tbaa !12
+  br label %30
+
+29:                                               ; preds = %24
+  call void @llvm.memcpy.p0i8.p0i8.i64(i8* align 1 %25, i8* align 1 %8, i64 %10, i1 false) #10
+  br label %30
+
+30:                                               ; preds = %24, %27, %29
+  %31 = load i64, i64* %4, align 8, !tbaa !11
+  %32 = getelementptr inbounds %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %0, i64 0, i32 1
+  store i64 %31, i64* %32, align 8, !tbaa !10
+  %33 = load i8*, i8** %26, align 8, !tbaa !7
+  %34 = getelementptr inbounds i8, i8* %33, i64 %31
+  store i8 0, i8* %34, align 1, !tbaa !12
+  call void @llvm.lifetime.end.p0i8(i64 8, i8* nonnull %17) #10
+  %35 = call i64 @strlen(i8* nonnull dereferenceable(1) %2) #10
+  %36 = load i64, i64* %32, align 8, !tbaa !10
+  %37 = sub i64 4611686018427387903, %36
+  %38 = icmp ult i64 %37, %35
+  br i1 %38, label %39, label %41
+
+39:                                               ; preds = %30
+  invoke void @_ZSt20__throw_length_errorPKc(i8* getelementptr inbounds ([21 x i8], [21 x i8]* @.str.6, i64 0, i64 0)) #18
+          to label %40 unwind label %43
+
+40:                                               ; preds = %39
+  unreachable
+
+41:                                               ; preds = %30
+  %42 = invoke dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_appendEPKcm(%"class.std::__cxx11::basic_string"* nonnull %0, i8* %2, i64 %35)
+          to label %49 unwind label %43
+
+43:                                               ; preds = %41, %39
+  %44 = landingpad { i8*, i32 }
+          cleanup
+  %45 = load i8*, i8** %26, align 8, !tbaa !7
+  %46 = icmp eq i8* %45, %16
+  br i1 %46, label %48, label %47
+
+47:                                               ; preds = %43
+  call void @_ZdlPv(i8* %45) #10
+  br label %48
+
+48:                                               ; preds = %43, %47
+  resume { i8*, i32 } %44
+
+49:                                               ; preds = %41
+  ret void
+}
+
+; Function Attrs: nofree nounwind uwtable
+define dso_local void @_Z4initv() local_unnamed_addr #6 {
+  %1 = load i32, i32* @_ZL6BLOCKI, align 4, !tbaa !13
+  %2 = sdiv i32 %1, 32
+  %3 = shl nsw i32 %2, 5
+  store i32 %3, i32* @_ZL6BLOCKI, align 4, !tbaa !13
+  %4 = load i32, i32* @_ZL6BLOCKK, align 4, !tbaa !13
+  %5 = srem i32 %4, 112
+  %6 = sub i32 %4, %5
+  store i32 %6, i32* @_ZL6BLOCKK, align 4, !tbaa !13
+  %7 = sext i32 %3 to i64
+  %8 = shl nsw i64 %7, 2
+  %9 = sext i32 %6 to i64
+  %10 = mul i64 %8, %9
+  %11 = tail call noalias i8* @valloc(i64 %10) #10
+  store i8* %11, i8** bitcast (float** @_ZL2vA to i8**), align 8, !tbaa !15
+  %12 = shl nsw i64 %9, 2
+  %13 = tail call noalias i8* @valloc(i64 %12) #10
+  store i8* %13, i8** bitcast (float** @_ZL2vB to i8**), align 8, !tbaa !15
+  %14 = tail call noalias i8* @valloc(i64 %8) #10
+  store i8* %14, i8** bitcast (float** @_ZL2vC to i8**), align 8, !tbaa !15
+  ret void
+}
+
+; Function Attrs: nofree nounwind
+declare dso_local noalias i8* @valloc(i64) local_unnamed_addr #7
+
+; Function Attrs: nofree norecurse nounwind uwtable
+define dso_local void @_Z10init_benchv() local_unnamed_addr #8 {
+  %1 = load i32, i32* @_ZL6BLOCKI, align 4, !tbaa !13
+  %2 = icmp sgt i32 %1, 0
+  %3 = load i32, i32* @_ZL6BLOCKK, align 4
+  br i1 %2, label %4, label %16
+
+4:                                                ; preds = %0
+  %5 = icmp sgt i32 %3, 0
+  %6 = load float*, float** @_ZL2vA, align 8
+  %7 = sext i32 %3 to i64
+  %8 = zext i32 %1 to i64
+  %9 = zext i32 %3 to i64
+  br label %10
+
+10:                                               ; preds = %4, %21
+  %11 = phi i64 [ 0, %4 ], [ %22, %21 ]
+  br i1 %5, label %12, label %21
+
+12:                                               ; preds = %10
+  %13 = trunc i64 %11 to i32
+  %14 = shl i32 %13, 1
+  %15 = mul nsw i64 %11, %7
+  br label %24
+
+16:                                               ; preds = %21, %0
+  %17 = icmp sgt i32 %3, 0
+  br i1 %17, label %18, label %33
+
+18:                                               ; preds = %16
+  %19 = load float*, float** @_ZL2vB, align 8, !tbaa !15
+  %20 = zext i32 %3 to i64
+  br label %38
+
+21:                                               ; preds = %24, %10
+  %22 = add nuw nsw i64 %11, 1
+  %23 = icmp ult i64 %22, %8
+  br i1 %23, label %10, label %16, !llvm.loop !16
+
+24:                                               ; preds = %24, %12
+  %25 = phi i64 [ 0, %12 ], [ %31, %24 ]
+  %26 = trunc i64 %25 to i32
+  %27 = add i32 %14, %26
+  %28 = sitofp i32 %27 to float
+  %29 = add nsw i64 %15, %25
+  %30 = getelementptr inbounds float, float* %6, i64 %29
+  store float %28, float* %30, align 4, !tbaa !18
+  %31 = add nuw nsw i64 %25, 1
+  %32 = icmp eq i64 %31, %9
+  br i1 %32, label %21, label %24, !llvm.loop !20
+
+33:                                               ; preds = %38, %16
+  br i1 %2, label %34, label %45
+
+34:                                               ; preds = %33
+  %35 = load i8*, i8** bitcast (float** @_ZL2vC to i8**), align 8, !tbaa !15
+  %36 = zext i32 %1 to i64
+  %37 = shl nuw nsw i64 %36, 2
+  call void @llvm.memset.p0i8.i64(i8* align 4 %35, i8 0, i64 %37, i1 false)
+  br label %45
+
+38:                                               ; preds = %18, %38
+  %39 = phi i64 [ 0, %18 ], [ %43, %38 ]
+  %40 = trunc i64 %39 to i32
+  %41 = sitofp i32 %40 to float
+  %42 = getelementptr inbounds float, float* %19, i64 %39
+  store float %41, float* %42, align 4, !tbaa !18
+  %43 = add nuw nsw i64 %39, 1
+  %44 = icmp ult i64 %43, %20
+  br i1 %44, label %38, label %33, !llvm.loop !21
+
+45:                                               ; preds = %34, %33
+  ret void
+}
+
+; Function Attrs: uwtable
+define dso_local float @_Z5benchv() local_unnamed_addr #9 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
+  %1 = tail call i64 @llvm.x86.rdtsc()
+  %2 = uitofp i64 %1 to double
+  %3 = load float*, float** @_ZL2vA, align 8, !tbaa !15
+  %4 = load float*, float** @_ZL2vB, align 8, !tbaa !15
+  %5 = load float*, float** @_ZL2vC, align 8, !tbaa !15
+  %6 = load i32, i32* @_ZL6BLOCKK, align 4, !tbaa !13
+  %7 = icmp sgt i32 %6, 0
+  br i1 %7, label %8, label %28
+
+8:                                                ; preds = %0
+  %9 = load i32, i32* @_ZL6BLOCKI, align 4, !tbaa !13
+  %10 = icmp sgt i32 %9, 0
+  %11 = zext i32 %9 to i64
+  %12 = zext i32 %9 to i64
+  %13 = zext i32 %9 to i64
+  %14 = zext i32 %9 to i64
+  %15 = zext i32 %9 to i64
+  %16 = zext i32 %9 to i64
+  %17 = zext i32 %9 to i64
+  %18 = zext i32 %9 to i64
+  %19 = zext i32 %9 to i64
+  %20 = icmp sgt i32 %9, 0
+  %21 = zext i32 %9 to i64
+  %22 = icmp sgt i32 %9, 0
+  %23 = zext i32 %9 to i64
+  %24 = zext i32 %9 to i64
+  %25 = sext i32 %9 to i64
+  %26 = sext i32 %9 to i64
+  %27 = sext i32 %6 to i64
+  br label %40
+
+28:                                               ; preds = %914, %0
+  %29 = tail call i64 @llvm.x86.rdtsc()
+  %30 = uitofp i64 %29 to double
+  %31 = fsub double %30, %2
+  %32 = load i32, i32* @_ZL6BLOCKI, align 4, !tbaa !13
+  %33 = load i32, i32* @_ZL6BLOCKK, align 4, !tbaa !13
+  %34 = shl i32 %33, 1
+  %35 = add nsw i32 %34, -1
+  %36 = mul nsw i32 %35, %32
+  %37 = sitofp i32 %36 to float
+  %38 = fptrunc double %31 to float
+  %39 = fdiv float %37, %38
+  ret float %39
+
+40:                                               ; preds = %8, %914
+  %41 = phi i64 [ 0, %8 ], [ %915, %914 ]
+  %42 = getelementptr inbounds float, float* %4, i64 %41
+  %43 = load float, float* %42, align 4, !tbaa !18
+  %44 = insertelement <8 x float> undef, float %43, i32 0
+  %45 = shufflevector <8 x float> %44, <8 x float> undef, <8 x i32> zeroinitializer
+  %46 = or i64 %41, 1
+  %47 = getelementptr inbounds float, float* %4, i64 %46
+  %48 = load float, float* %47, align 4, !tbaa !18
+  %49 = insertelement <8 x float> undef, float %48, i32 0
+  %50 = shufflevector <8 x float> %49, <8 x float> undef, <8 x i32> zeroinitializer
+  %51 = add nuw nsw i64 %41, 2
+  %52 = getelementptr inbounds float, float* %4, i64 %51
+  %53 = load float, float* %52, align 4, !tbaa !18
+  %54 = insertelement <8 x float> undef, float %53, i32 0
+  %55 = shufflevector <8 x float> %54, <8 x float> undef, <8 x i32> zeroinitializer
+  %56 = add nuw nsw i64 %41, 3
+  %57 = getelementptr inbounds float, float* %4, i64 %56
+  %58 = load float, float* %57, align 4, !tbaa !18
+  %59 = insertelement <8 x float> undef, float %58, i32 0
+  %60 = shufflevector <8 x float> %59, <8 x float> undef, <8 x i32> zeroinitializer
+  %61 = add nuw nsw i64 %41, 4
+  %62 = getelementptr inbounds float, float* %4, i64 %61
+  %63 = load float, float* %62, align 4, !tbaa !18
+  %64 = insertelement <8 x float> undef, float %63, i32 0
+  %65 = shufflevector <8 x float> %64, <8 x float> undef, <8 x i32> zeroinitializer
+  %66 = add nuw nsw i64 %41, 5
+  %67 = getelementptr inbounds float, float* %4, i64 %66
+  %68 = load float, float* %67, align 4, !tbaa !18
+  %69 = insertelement <8 x float> undef, float %68, i32 0
+  %70 = shufflevector <8 x float> %69, <8 x float> undef, <8 x i32> zeroinitializer
+  %71 = add nuw nsw i64 %41, 6
+  %72 = getelementptr inbounds float, float* %4, i64 %71
+  %73 = load float, float* %72, align 4, !tbaa !18
+  %74 = insertelement <8 x float> undef, float %73, i32 0
+  %75 = shufflevector <8 x float> %74, <8 x float> undef, <8 x i32> zeroinitializer
+  %76 = add nuw nsw i64 %41, 7
+  %77 = getelementptr inbounds float, float* %4, i64 %76
+  %78 = load float, float* %77, align 4, !tbaa !18
+  %79 = insertelement <8 x float> undef, float %78, i32 0
+  %80 = shufflevector <8 x float> %79, <8 x float> undef, <8 x i32> zeroinitializer
+  %81 = add nuw nsw i64 %41, 8
+  %82 = getelementptr inbounds float, float* %4, i64 %81
+  %83 = load float, float* %82, align 4, !tbaa !18
+  %84 = insertelement <8 x float> undef, float %83, i32 0
+  %85 = shufflevector <8 x float> %84, <8 x float> undef, <8 x i32> zeroinitializer
+  %86 = add nuw nsw i64 %41, 9
+  %87 = getelementptr inbounds float, float* %4, i64 %86
+  %88 = load float, float* %87, align 4, !tbaa !18
+  %89 = insertelement <8 x float> undef, float %88, i32 0
+  %90 = shufflevector <8 x float> %89, <8 x float> undef, <8 x i32> zeroinitializer
+  %91 = add nuw nsw i64 %41, 10
+  %92 = getelementptr inbounds float, float* %4, i64 %91
+  %93 = load float, float* %92, align 4, !tbaa !18
+  %94 = insertelement <8 x float> undef, float %93, i32 0
+  %95 = shufflevector <8 x float> %94, <8 x float> undef, <8 x i32> zeroinitializer
+  %96 = add nuw nsw i64 %41, 11
+  %97 = getelementptr inbounds float, float* %4, i64 %96
+  %98 = load float, float* %97, align 4, !tbaa !18
+  %99 = insertelement <8 x float> undef, float %98, i32 0
+  %100 = shufflevector <8 x float> %99, <8 x float> undef, <8 x i32> zeroinitializer
+  %101 = add nuw nsw i64 %41, 12
+  %102 = getelementptr inbounds float, float* %4, i64 %101
+  %103 = load float, float* %102, align 4, !tbaa !18
+  %104 = insertelement <8 x float> undef, float %103, i32 0
+  %105 = shufflevector <8 x float> %104, <8 x float> undef, <8 x i32> zeroinitializer
+  %106 = add nuw nsw i64 %41, 13
+  %107 = getelementptr inbounds float, float* %4, i64 %106
+  %108 = load float, float* %107, align 4, !tbaa !18
+  %109 = insertelement <8 x float> undef, float %108, i32 0
+  %110 = shufflevector <8 x float> %109, <8 x float> undef, <8 x i32> zeroinitializer
+  br i1 %10, label %111, label %914
+
+111:                                              ; preds = %40
+  %112 = trunc i64 %41 to i32
+  %113 = mul nsw i32 %9, %112
+  br label %119
+
+114:                                              ; preds = %119
+  br i1 %10, label %115, label %914
+
+115:                                              ; preds = %114
+  %116 = trunc i64 %46 to i32
+  %117 = mul nsw i32 %9, %116
+  %118 = sext i32 %117 to i64
+  br label %185
+
+119:                                              ; preds = %111, %119
+  %120 = phi i64 [ 0, %111 ], [ %178, %119 ]
+  %121 = getelementptr inbounds float, float* %5, i64 %120
+  %122 = getelementptr inbounds float, float* %121, i64 8
+  %123 = bitcast float* %122 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %123, i32 0, i32 1, i32 1)
+  %124 = getelementptr inbounds float, float* %3, i64 %120
+  %125 = getelementptr inbounds float, float* %124, i64 8
+  %126 = bitcast float* %125 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %126, i32 0, i32 1, i32 1)
+  %127 = getelementptr inbounds float, float* %121, i64 16
+  %128 = bitcast float* %127 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %128, i32 0, i32 1, i32 1)
+  %129 = getelementptr inbounds float, float* %124, i64 16
+  %130 = bitcast float* %129 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %130, i32 0, i32 1, i32 1)
+  %131 = getelementptr inbounds float, float* %121, i64 24
+  %132 = bitcast float* %131 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %132, i32 0, i32 1, i32 1)
+  %133 = getelementptr inbounds float, float* %124, i64 24
+  %134 = bitcast float* %133 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %134, i32 0, i32 1, i32 1)
+  %135 = getelementptr inbounds float, float* %121, i64 32
+  %136 = bitcast float* %135 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %136, i32 0, i32 1, i32 1)
+  %137 = getelementptr inbounds float, float* %124, i64 32
+  %138 = bitcast float* %137 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %138, i32 0, i32 1, i32 1)
+  %139 = bitcast float* %121 to <8 x float>*
+  %140 = load <8 x float>, <8 x float>* %139, align 1, !tbaa !12
+  %141 = or i64 %120, 8
+  %142 = getelementptr inbounds float, float* %5, i64 %141
+  %143 = bitcast float* %142 to <8 x float>*
+  %144 = load <8 x float>, <8 x float>* %143, align 1, !tbaa !12
+  %145 = or i64 %120, 16
+  %146 = getelementptr inbounds float, float* %5, i64 %145
+  %147 = bitcast float* %146 to <8 x float>*
+  %148 = load <8 x float>, <8 x float>* %147, align 1, !tbaa !12
+  %149 = or i64 %120, 24
+  %150 = getelementptr inbounds float, float* %5, i64 %149
+  %151 = bitcast float* %150 to <8 x float>*
+  %152 = load <8 x float>, <8 x float>* %151, align 1, !tbaa !12
+  %153 = trunc i64 %120 to i32
+  %154 = add nsw i32 %113, %153
+  %155 = sext i32 %154 to i64
+  %156 = getelementptr inbounds float, float* %3, i64 %155
+  %157 = bitcast float* %156 to <8 x float>*
+  %158 = load <8 x float>, <8 x float>* %157, align 1, !tbaa !12
+  %159 = add nsw i32 %154, 8
+  %160 = sext i32 %159 to i64
+  %161 = getelementptr inbounds float, float* %3, i64 %160
+  %162 = bitcast float* %161 to <8 x float>*
+  %163 = load <8 x float>, <8 x float>* %162, align 1, !tbaa !12
+  %164 = add nsw i32 %154, 16
+  %165 = sext i32 %164 to i64
+  %166 = getelementptr inbounds float, float* %3, i64 %165
+  %167 = bitcast float* %166 to <8 x float>*
+  %168 = load <8 x float>, <8 x float>* %167, align 1, !tbaa !12
+  %169 = add nsw i32 %154, 24
+  %170 = sext i32 %169 to i64
+  %171 = getelementptr inbounds float, float* %3, i64 %170
+  %172 = bitcast float* %171 to <8 x float>*
+  %173 = load <8 x float>, <8 x float>* %172, align 1, !tbaa !12
+  %174 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %158, <8 x float> %45, <8 x float> %140) #10
+  %175 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %163, <8 x float> %45, <8 x float> %144) #10
+  %176 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %168, <8 x float> %45, <8 x float> %148) #10
+  %177 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %173, <8 x float> %45, <8 x float> %152) #10
+  store <8 x float> %174, <8 x float>* %139, align 1, !tbaa !12
+  store <8 x float> %175, <8 x float>* %143, align 1, !tbaa !12
+  store <8 x float> %176, <8 x float>* %147, align 1, !tbaa !12
+  store <8 x float> %177, <8 x float>* %151, align 1, !tbaa !12
+  %178 = add nuw nsw i64 %120, 32
+  %179 = icmp ult i64 %178, %11
+  br i1 %179, label %119, label %114
+
+180:                                              ; preds = %185
+  br i1 %10, label %181, label %914
+
+181:                                              ; preds = %180
+  %182 = trunc i64 %51 to i32
+  %183 = mul nsw i32 %9, %182
+  %184 = sext i32 %183 to i64
+  br label %246
+
+185:                                              ; preds = %115, %185
+  %186 = phi i64 [ 0, %115 ], [ %239, %185 ]
+  %187 = getelementptr inbounds float, float* %5, i64 %186
+  %188 = getelementptr inbounds float, float* %187, i64 8
+  %189 = bitcast float* %188 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %189, i32 0, i32 1, i32 1)
+  %190 = getelementptr inbounds float, float* %3, i64 %186
+  %191 = getelementptr inbounds float, float* %190, i64 8
+  %192 = bitcast float* %191 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %192, i32 0, i32 1, i32 1)
+  %193 = getelementptr inbounds float, float* %187, i64 16
+  %194 = bitcast float* %193 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %194, i32 0, i32 1, i32 1)
+  %195 = getelementptr inbounds float, float* %190, i64 16
+  %196 = bitcast float* %195 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %196, i32 0, i32 1, i32 1)
+  %197 = getelementptr inbounds float, float* %187, i64 24
+  %198 = bitcast float* %197 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %198, i32 0, i32 1, i32 1)
+  %199 = getelementptr inbounds float, float* %190, i64 24
+  %200 = bitcast float* %199 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %200, i32 0, i32 1, i32 1)
+  %201 = getelementptr inbounds float, float* %187, i64 32
+  %202 = bitcast float* %201 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %202, i32 0, i32 1, i32 1)
+  %203 = getelementptr inbounds float, float* %190, i64 32
+  %204 = bitcast float* %203 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %204, i32 0, i32 1, i32 1)
+  %205 = bitcast float* %187 to <8 x float>*
+  %206 = load <8 x float>, <8 x float>* %205, align 1, !tbaa !12
+  %207 = or i64 %186, 8
+  %208 = getelementptr inbounds float, float* %5, i64 %207
+  %209 = bitcast float* %208 to <8 x float>*
+  %210 = load <8 x float>, <8 x float>* %209, align 1, !tbaa !12
+  %211 = or i64 %186, 16
+  %212 = getelementptr inbounds float, float* %5, i64 %211
+  %213 = bitcast float* %212 to <8 x float>*
+  %214 = load <8 x float>, <8 x float>* %213, align 1, !tbaa !12
+  %215 = or i64 %186, 24
+  %216 = getelementptr inbounds float, float* %5, i64 %215
+  %217 = bitcast float* %216 to <8 x float>*
+  %218 = load <8 x float>, <8 x float>* %217, align 1, !tbaa !12
+  %219 = add nsw i64 %186, %118
+  %220 = getelementptr inbounds float, float* %3, i64 %219
+  %221 = bitcast float* %220 to <8 x float>*
+  %222 = load <8 x float>, <8 x float>* %221, align 1, !tbaa !12
+  %223 = add nsw i64 %219, 8
+  %224 = getelementptr inbounds float, float* %3, i64 %223
+  %225 = bitcast float* %224 to <8 x float>*
+  %226 = load <8 x float>, <8 x float>* %225, align 1, !tbaa !12
+  %227 = add nsw i64 %219, 16
+  %228 = getelementptr inbounds float, float* %3, i64 %227
+  %229 = bitcast float* %228 to <8 x float>*
+  %230 = load <8 x float>, <8 x float>* %229, align 1, !tbaa !12
+  %231 = add nsw i64 %219, 24
+  %232 = getelementptr inbounds float, float* %3, i64 %231
+  %233 = bitcast float* %232 to <8 x float>*
+  %234 = load <8 x float>, <8 x float>* %233, align 1, !tbaa !12
+  %235 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %222, <8 x float> %50, <8 x float> %206) #10
+  %236 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %226, <8 x float> %50, <8 x float> %210) #10
+  %237 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %230, <8 x float> %50, <8 x float> %214) #10
+  %238 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %234, <8 x float> %50, <8 x float> %218) #10
+  store <8 x float> %235, <8 x float>* %205, align 1, !tbaa !12
+  store <8 x float> %236, <8 x float>* %209, align 1, !tbaa !12
+  store <8 x float> %237, <8 x float>* %213, align 1, !tbaa !12
+  store <8 x float> %238, <8 x float>* %217, align 1, !tbaa !12
+  %239 = add nuw nsw i64 %186, 32
+  %240 = icmp ult i64 %239, %12
+  br i1 %240, label %185, label %180
+
+241:                                              ; preds = %246
+  br i1 %10, label %242, label %914
+
+242:                                              ; preds = %241
+  %243 = trunc i64 %56 to i32
+  %244 = mul nsw i32 %9, %243
+  %245 = sext i32 %244 to i64
+  br label %307
+
+246:                                              ; preds = %181, %246
+  %247 = phi i64 [ 0, %181 ], [ %300, %246 ]
+  %248 = getelementptr inbounds float, float* %5, i64 %247
+  %249 = getelementptr inbounds float, float* %248, i64 8
+  %250 = bitcast float* %249 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %250, i32 0, i32 1, i32 1)
+  %251 = getelementptr inbounds float, float* %3, i64 %247
+  %252 = getelementptr inbounds float, float* %251, i64 8
+  %253 = bitcast float* %252 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %253, i32 0, i32 1, i32 1)
+  %254 = getelementptr inbounds float, float* %248, i64 16
+  %255 = bitcast float* %254 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %255, i32 0, i32 1, i32 1)
+  %256 = getelementptr inbounds float, float* %251, i64 16
+  %257 = bitcast float* %256 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %257, i32 0, i32 1, i32 1)
+  %258 = getelementptr inbounds float, float* %248, i64 24
+  %259 = bitcast float* %258 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %259, i32 0, i32 1, i32 1)
+  %260 = getelementptr inbounds float, float* %251, i64 24
+  %261 = bitcast float* %260 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %261, i32 0, i32 1, i32 1)
+  %262 = getelementptr inbounds float, float* %248, i64 32
+  %263 = bitcast float* %262 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %263, i32 0, i32 1, i32 1)
+  %264 = getelementptr inbounds float, float* %251, i64 32
+  %265 = bitcast float* %264 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %265, i32 0, i32 1, i32 1)
+  %266 = bitcast float* %248 to <8 x float>*
+  %267 = load <8 x float>, <8 x float>* %266, align 1, !tbaa !12
+  %268 = or i64 %247, 8
+  %269 = getelementptr inbounds float, float* %5, i64 %268
+  %270 = bitcast float* %269 to <8 x float>*
+  %271 = load <8 x float>, <8 x float>* %270, align 1, !tbaa !12
+  %272 = or i64 %247, 16
+  %273 = getelementptr inbounds float, float* %5, i64 %272
+  %274 = bitcast float* %273 to <8 x float>*
+  %275 = load <8 x float>, <8 x float>* %274, align 1, !tbaa !12
+  %276 = or i64 %247, 24
+  %277 = getelementptr inbounds float, float* %5, i64 %276
+  %278 = bitcast float* %277 to <8 x float>*
+  %279 = load <8 x float>, <8 x float>* %278, align 1, !tbaa !12
+  %280 = add nsw i64 %247, %184
+  %281 = getelementptr inbounds float, float* %3, i64 %280
+  %282 = bitcast float* %281 to <8 x float>*
+  %283 = load <8 x float>, <8 x float>* %282, align 1, !tbaa !12
+  %284 = add nsw i64 %280, 8
+  %285 = getelementptr inbounds float, float* %3, i64 %284
+  %286 = bitcast float* %285 to <8 x float>*
+  %287 = load <8 x float>, <8 x float>* %286, align 1, !tbaa !12
+  %288 = add nsw i64 %280, 16
+  %289 = getelementptr inbounds float, float* %3, i64 %288
+  %290 = bitcast float* %289 to <8 x float>*
+  %291 = load <8 x float>, <8 x float>* %290, align 1, !tbaa !12
+  %292 = add nsw i64 %280, 24
+  %293 = getelementptr inbounds float, float* %3, i64 %292
+  %294 = bitcast float* %293 to <8 x float>*
+  %295 = load <8 x float>, <8 x float>* %294, align 1, !tbaa !12
+  %296 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %283, <8 x float> %55, <8 x float> %267) #10
+  %297 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %287, <8 x float> %55, <8 x float> %271) #10
+  %298 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %291, <8 x float> %55, <8 x float> %275) #10
+  %299 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %295, <8 x float> %55, <8 x float> %279) #10
+  store <8 x float> %296, <8 x float>* %266, align 1, !tbaa !12
+  store <8 x float> %297, <8 x float>* %270, align 1, !tbaa !12
+  store <8 x float> %298, <8 x float>* %274, align 1, !tbaa !12
+  store <8 x float> %299, <8 x float>* %278, align 1, !tbaa !12
+  %300 = add nuw nsw i64 %247, 32
+  %301 = icmp ult i64 %300, %13
+  br i1 %301, label %246, label %241
+
+302:                                              ; preds = %307
+  br i1 %10, label %303, label %914
+
+303:                                              ; preds = %302
+  %304 = trunc i64 %61 to i32
+  %305 = mul nsw i32 %9, %304
+  %306 = sext i32 %305 to i64
+  br label %368
+
+307:                                              ; preds = %242, %307
+  %308 = phi i64 [ 0, %242 ], [ %361, %307 ]
+  %309 = getelementptr inbounds float, float* %5, i64 %308
+  %310 = getelementptr inbounds float, float* %309, i64 8
+  %311 = bitcast float* %310 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %311, i32 0, i32 1, i32 1)
+  %312 = getelementptr inbounds float, float* %3, i64 %308
+  %313 = getelementptr inbounds float, float* %312, i64 8
+  %314 = bitcast float* %313 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %314, i32 0, i32 1, i32 1)
+  %315 = getelementptr inbounds float, float* %309, i64 16
+  %316 = bitcast float* %315 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %316, i32 0, i32 1, i32 1)
+  %317 = getelementptr inbounds float, float* %312, i64 16
+  %318 = bitcast float* %317 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %318, i32 0, i32 1, i32 1)
+  %319 = getelementptr inbounds float, float* %309, i64 24
+  %320 = bitcast float* %319 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %320, i32 0, i32 1, i32 1)
+  %321 = getelementptr inbounds float, float* %312, i64 24
+  %322 = bitcast float* %321 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %322, i32 0, i32 1, i32 1)
+  %323 = getelementptr inbounds float, float* %309, i64 32
+  %324 = bitcast float* %323 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %324, i32 0, i32 1, i32 1)
+  %325 = getelementptr inbounds float, float* %312, i64 32
+  %326 = bitcast float* %325 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %326, i32 0, i32 1, i32 1)
+  %327 = bitcast float* %309 to <8 x float>*
+  %328 = load <8 x float>, <8 x float>* %327, align 1, !tbaa !12
+  %329 = or i64 %308, 8
+  %330 = getelementptr inbounds float, float* %5, i64 %329
+  %331 = bitcast float* %330 to <8 x float>*
+  %332 = load <8 x float>, <8 x float>* %331, align 1, !tbaa !12
+  %333 = or i64 %308, 16
+  %334 = getelementptr inbounds float, float* %5, i64 %333
+  %335 = bitcast float* %334 to <8 x float>*
+  %336 = load <8 x float>, <8 x float>* %335, align 1, !tbaa !12
+  %337 = or i64 %308, 24
+  %338 = getelementptr inbounds float, float* %5, i64 %337
+  %339 = bitcast float* %338 to <8 x float>*
+  %340 = load <8 x float>, <8 x float>* %339, align 1, !tbaa !12
+  %341 = add nsw i64 %308, %245
+  %342 = getelementptr inbounds float, float* %3, i64 %341
+  %343 = bitcast float* %342 to <8 x float>*
+  %344 = load <8 x float>, <8 x float>* %343, align 1, !tbaa !12
+  %345 = add nsw i64 %341, 8
+  %346 = getelementptr inbounds float, float* %3, i64 %345
+  %347 = bitcast float* %346 to <8 x float>*
+  %348 = load <8 x float>, <8 x float>* %347, align 1, !tbaa !12
+  %349 = add nsw i64 %341, 16
+  %350 = getelementptr inbounds float, float* %3, i64 %349
+  %351 = bitcast float* %350 to <8 x float>*
+  %352 = load <8 x float>, <8 x float>* %351, align 1, !tbaa !12
+  %353 = add nsw i64 %341, 24
+  %354 = getelementptr inbounds float, float* %3, i64 %353
+  %355 = bitcast float* %354 to <8 x float>*
+  %356 = load <8 x float>, <8 x float>* %355, align 1, !tbaa !12
+  %357 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %344, <8 x float> %60, <8 x float> %328) #10
+  %358 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %348, <8 x float> %60, <8 x float> %332) #10
+  %359 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %352, <8 x float> %60, <8 x float> %336) #10
+  %360 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %356, <8 x float> %60, <8 x float> %340) #10
+  store <8 x float> %357, <8 x float>* %327, align 1, !tbaa !12
+  store <8 x float> %358, <8 x float>* %331, align 1, !tbaa !12
+  store <8 x float> %359, <8 x float>* %335, align 1, !tbaa !12
+  store <8 x float> %360, <8 x float>* %339, align 1, !tbaa !12
+  %361 = add nuw nsw i64 %308, 32
+  %362 = icmp ult i64 %361, %14
+  br i1 %362, label %307, label %302
+
+363:                                              ; preds = %368
+  br i1 %10, label %364, label %914
+
+364:                                              ; preds = %363
+  %365 = trunc i64 %66 to i32
+  %366 = mul nsw i32 %9, %365
+  %367 = sext i32 %366 to i64
+  br label %429
+
+368:                                              ; preds = %303, %368
+  %369 = phi i64 [ 0, %303 ], [ %422, %368 ]
+  %370 = getelementptr inbounds float, float* %5, i64 %369
+  %371 = getelementptr inbounds float, float* %370, i64 8
+  %372 = bitcast float* %371 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %372, i32 0, i32 1, i32 1)
+  %373 = getelementptr inbounds float, float* %3, i64 %369
+  %374 = getelementptr inbounds float, float* %373, i64 8
+  %375 = bitcast float* %374 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %375, i32 0, i32 1, i32 1)
+  %376 = getelementptr inbounds float, float* %370, i64 16
+  %377 = bitcast float* %376 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %377, i32 0, i32 1, i32 1)
+  %378 = getelementptr inbounds float, float* %373, i64 16
+  %379 = bitcast float* %378 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %379, i32 0, i32 1, i32 1)
+  %380 = getelementptr inbounds float, float* %370, i64 24
+  %381 = bitcast float* %380 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %381, i32 0, i32 1, i32 1)
+  %382 = getelementptr inbounds float, float* %373, i64 24
+  %383 = bitcast float* %382 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %383, i32 0, i32 1, i32 1)
+  %384 = getelementptr inbounds float, float* %370, i64 32
+  %385 = bitcast float* %384 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %385, i32 0, i32 1, i32 1)
+  %386 = getelementptr inbounds float, float* %373, i64 32
+  %387 = bitcast float* %386 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %387, i32 0, i32 1, i32 1)
+  %388 = bitcast float* %370 to <8 x float>*
+  %389 = load <8 x float>, <8 x float>* %388, align 1, !tbaa !12
+  %390 = or i64 %369, 8
+  %391 = getelementptr inbounds float, float* %5, i64 %390
+  %392 = bitcast float* %391 to <8 x float>*
+  %393 = load <8 x float>, <8 x float>* %392, align 1, !tbaa !12
+  %394 = or i64 %369, 16
+  %395 = getelementptr inbounds float, float* %5, i64 %394
+  %396 = bitcast float* %395 to <8 x float>*
+  %397 = load <8 x float>, <8 x float>* %396, align 1, !tbaa !12
+  %398 = or i64 %369, 24
+  %399 = getelementptr inbounds float, float* %5, i64 %398
+  %400 = bitcast float* %399 to <8 x float>*
+  %401 = load <8 x float>, <8 x float>* %400, align 1, !tbaa !12
+  %402 = add nsw i64 %369, %306
+  %403 = getelementptr inbounds float, float* %3, i64 %402
+  %404 = bitcast float* %403 to <8 x float>*
+  %405 = load <8 x float>, <8 x float>* %404, align 1, !tbaa !12
+  %406 = add nsw i64 %402, 8
+  %407 = getelementptr inbounds float, float* %3, i64 %406
+  %408 = bitcast float* %407 to <8 x float>*
+  %409 = load <8 x float>, <8 x float>* %408, align 1, !tbaa !12
+  %410 = add nsw i64 %402, 16
+  %411 = getelementptr inbounds float, float* %3, i64 %410
+  %412 = bitcast float* %411 to <8 x float>*
+  %413 = load <8 x float>, <8 x float>* %412, align 1, !tbaa !12
+  %414 = add nsw i64 %402, 24
+  %415 = getelementptr inbounds float, float* %3, i64 %414
+  %416 = bitcast float* %415 to <8 x float>*
+  %417 = load <8 x float>, <8 x float>* %416, align 1, !tbaa !12
+  %418 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %405, <8 x float> %65, <8 x float> %389) #10
+  %419 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %409, <8 x float> %65, <8 x float> %393) #10
+  %420 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %413, <8 x float> %65, <8 x float> %397) #10
+  %421 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %417, <8 x float> %65, <8 x float> %401) #10
+  store <8 x float> %418, <8 x float>* %388, align 1, !tbaa !12
+  store <8 x float> %419, <8 x float>* %392, align 1, !tbaa !12
+  store <8 x float> %420, <8 x float>* %396, align 1, !tbaa !12
+  store <8 x float> %421, <8 x float>* %400, align 1, !tbaa !12
+  %422 = add nuw nsw i64 %369, 32
+  %423 = icmp ult i64 %422, %15
+  br i1 %423, label %368, label %363
+
+424:                                              ; preds = %429
+  br i1 %10, label %425, label %914
+
+425:                                              ; preds = %424
+  %426 = trunc i64 %71 to i32
+  %427 = mul nsw i32 %9, %426
+  %428 = sext i32 %427 to i64
+  br label %490
+
+429:                                              ; preds = %364, %429
+  %430 = phi i64 [ 0, %364 ], [ %483, %429 ]
+  %431 = getelementptr inbounds float, float* %5, i64 %430
+  %432 = getelementptr inbounds float, float* %431, i64 8
+  %433 = bitcast float* %432 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %433, i32 0, i32 1, i32 1)
+  %434 = getelementptr inbounds float, float* %3, i64 %430
+  %435 = getelementptr inbounds float, float* %434, i64 8
+  %436 = bitcast float* %435 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %436, i32 0, i32 1, i32 1)
+  %437 = getelementptr inbounds float, float* %431, i64 16
+  %438 = bitcast float* %437 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %438, i32 0, i32 1, i32 1)
+  %439 = getelementptr inbounds float, float* %434, i64 16
+  %440 = bitcast float* %439 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %440, i32 0, i32 1, i32 1)
+  %441 = getelementptr inbounds float, float* %431, i64 24
+  %442 = bitcast float* %441 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %442, i32 0, i32 1, i32 1)
+  %443 = getelementptr inbounds float, float* %434, i64 24
+  %444 = bitcast float* %443 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %444, i32 0, i32 1, i32 1)
+  %445 = getelementptr inbounds float, float* %431, i64 32
+  %446 = bitcast float* %445 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %446, i32 0, i32 1, i32 1)
+  %447 = getelementptr inbounds float, float* %434, i64 32
+  %448 = bitcast float* %447 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %448, i32 0, i32 1, i32 1)
+  %449 = bitcast float* %431 to <8 x float>*
+  %450 = load <8 x float>, <8 x float>* %449, align 1, !tbaa !12
+  %451 = or i64 %430, 8
+  %452 = getelementptr inbounds float, float* %5, i64 %451
+  %453 = bitcast float* %452 to <8 x float>*
+  %454 = load <8 x float>, <8 x float>* %453, align 1, !tbaa !12
+  %455 = or i64 %430, 16
+  %456 = getelementptr inbounds float, float* %5, i64 %455
+  %457 = bitcast float* %456 to <8 x float>*
+  %458 = load <8 x float>, <8 x float>* %457, align 1, !tbaa !12
+  %459 = or i64 %430, 24
+  %460 = getelementptr inbounds float, float* %5, i64 %459
+  %461 = bitcast float* %460 to <8 x float>*
+  %462 = load <8 x float>, <8 x float>* %461, align 1, !tbaa !12
+  %463 = add nsw i64 %430, %367
+  %464 = getelementptr inbounds float, float* %3, i64 %463
+  %465 = bitcast float* %464 to <8 x float>*
+  %466 = load <8 x float>, <8 x float>* %465, align 1, !tbaa !12
+  %467 = add nsw i64 %463, 8
+  %468 = getelementptr inbounds float, float* %3, i64 %467
+  %469 = bitcast float* %468 to <8 x float>*
+  %470 = load <8 x float>, <8 x float>* %469, align 1, !tbaa !12
+  %471 = add nsw i64 %463, 16
+  %472 = getelementptr inbounds float, float* %3, i64 %471
+  %473 = bitcast float* %472 to <8 x float>*
+  %474 = load <8 x float>, <8 x float>* %473, align 1, !tbaa !12
+  %475 = add nsw i64 %463, 24
+  %476 = getelementptr inbounds float, float* %3, i64 %475
+  %477 = bitcast float* %476 to <8 x float>*
+  %478 = load <8 x float>, <8 x float>* %477, align 1, !tbaa !12
+  %479 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %466, <8 x float> %70, <8 x float> %450) #10
+  %480 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %470, <8 x float> %70, <8 x float> %454) #10
+  %481 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %474, <8 x float> %70, <8 x float> %458) #10
+  %482 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %478, <8 x float> %70, <8 x float> %462) #10
+  store <8 x float> %479, <8 x float>* %449, align 1, !tbaa !12
+  store <8 x float> %480, <8 x float>* %453, align 1, !tbaa !12
+  store <8 x float> %481, <8 x float>* %457, align 1, !tbaa !12
+  store <8 x float> %482, <8 x float>* %461, align 1, !tbaa !12
+  %483 = add nuw nsw i64 %430, 32
+  %484 = icmp ult i64 %483, %16
+  br i1 %484, label %429, label %424
+
+485:                                              ; preds = %490
+  br i1 %10, label %486, label %914
+
+486:                                              ; preds = %485
+  %487 = trunc i64 %76 to i32
+  %488 = mul nsw i32 %9, %487
+  %489 = sext i32 %488 to i64
+  br label %551
+
+490:                                              ; preds = %425, %490
+  %491 = phi i64 [ 0, %425 ], [ %544, %490 ]
+  %492 = getelementptr inbounds float, float* %5, i64 %491
+  %493 = getelementptr inbounds float, float* %492, i64 8
+  %494 = bitcast float* %493 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %494, i32 0, i32 1, i32 1)
+  %495 = getelementptr inbounds float, float* %3, i64 %491
+  %496 = getelementptr inbounds float, float* %495, i64 8
+  %497 = bitcast float* %496 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %497, i32 0, i32 1, i32 1)
+  %498 = getelementptr inbounds float, float* %492, i64 16
+  %499 = bitcast float* %498 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %499, i32 0, i32 1, i32 1)
+  %500 = getelementptr inbounds float, float* %495, i64 16
+  %501 = bitcast float* %500 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %501, i32 0, i32 1, i32 1)
+  %502 = getelementptr inbounds float, float* %492, i64 24
+  %503 = bitcast float* %502 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %503, i32 0, i32 1, i32 1)
+  %504 = getelementptr inbounds float, float* %495, i64 24
+  %505 = bitcast float* %504 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %505, i32 0, i32 1, i32 1)
+  %506 = getelementptr inbounds float, float* %492, i64 32
+  %507 = bitcast float* %506 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %507, i32 0, i32 1, i32 1)
+  %508 = getelementptr inbounds float, float* %495, i64 32
+  %509 = bitcast float* %508 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %509, i32 0, i32 1, i32 1)
+  %510 = bitcast float* %492 to <8 x float>*
+  %511 = load <8 x float>, <8 x float>* %510, align 1, !tbaa !12
+  %512 = or i64 %491, 8
+  %513 = getelementptr inbounds float, float* %5, i64 %512
+  %514 = bitcast float* %513 to <8 x float>*
+  %515 = load <8 x float>, <8 x float>* %514, align 1, !tbaa !12
+  %516 = or i64 %491, 16
+  %517 = getelementptr inbounds float, float* %5, i64 %516
+  %518 = bitcast float* %517 to <8 x float>*
+  %519 = load <8 x float>, <8 x float>* %518, align 1, !tbaa !12
+  %520 = or i64 %491, 24
+  %521 = getelementptr inbounds float, float* %5, i64 %520
+  %522 = bitcast float* %521 to <8 x float>*
+  %523 = load <8 x float>, <8 x float>* %522, align 1, !tbaa !12
+  %524 = add nsw i64 %491, %428
+  %525 = getelementptr inbounds float, float* %3, i64 %524
+  %526 = bitcast float* %525 to <8 x float>*
+  %527 = load <8 x float>, <8 x float>* %526, align 1, !tbaa !12
+  %528 = add nsw i64 %524, 8
+  %529 = getelementptr inbounds float, float* %3, i64 %528
+  %530 = bitcast float* %529 to <8 x float>*
+  %531 = load <8 x float>, <8 x float>* %530, align 1, !tbaa !12
+  %532 = add nsw i64 %524, 16
+  %533 = getelementptr inbounds float, float* %3, i64 %532
+  %534 = bitcast float* %533 to <8 x float>*
+  %535 = load <8 x float>, <8 x float>* %534, align 1, !tbaa !12
+  %536 = add nsw i64 %524, 24
+  %537 = getelementptr inbounds float, float* %3, i64 %536
+  %538 = bitcast float* %537 to <8 x float>*
+  %539 = load <8 x float>, <8 x float>* %538, align 1, !tbaa !12
+  %540 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %527, <8 x float> %75, <8 x float> %511) #10
+  %541 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %531, <8 x float> %75, <8 x float> %515) #10
+  %542 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %535, <8 x float> %75, <8 x float> %519) #10
+  %543 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %539, <8 x float> %75, <8 x float> %523) #10
+  store <8 x float> %540, <8 x float>* %510, align 1, !tbaa !12
+  store <8 x float> %541, <8 x float>* %514, align 1, !tbaa !12
+  store <8 x float> %542, <8 x float>* %518, align 1, !tbaa !12
+  store <8 x float> %543, <8 x float>* %522, align 1, !tbaa !12
+  %544 = add nuw nsw i64 %491, 32
+  %545 = icmp ult i64 %544, %17
+  br i1 %545, label %490, label %485
+
+546:                                              ; preds = %551
+  br i1 %10, label %547, label %914
+
+547:                                              ; preds = %546
+  %548 = trunc i64 %81 to i32
+  %549 = mul nsw i32 %9, %548
+  %550 = sext i32 %549 to i64
+  br label %611
+
+551:                                              ; preds = %486, %551
+  %552 = phi i64 [ 0, %486 ], [ %605, %551 ]
+  %553 = getelementptr inbounds float, float* %5, i64 %552
+  %554 = getelementptr inbounds float, float* %553, i64 8
+  %555 = bitcast float* %554 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %555, i32 0, i32 1, i32 1)
+  %556 = getelementptr inbounds float, float* %3, i64 %552
+  %557 = getelementptr inbounds float, float* %556, i64 8
+  %558 = bitcast float* %557 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %558, i32 0, i32 1, i32 1)
+  %559 = getelementptr inbounds float, float* %553, i64 16
+  %560 = bitcast float* %559 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %560, i32 0, i32 1, i32 1)
+  %561 = getelementptr inbounds float, float* %556, i64 16
+  %562 = bitcast float* %561 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %562, i32 0, i32 1, i32 1)
+  %563 = getelementptr inbounds float, float* %553, i64 24
+  %564 = bitcast float* %563 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %564, i32 0, i32 1, i32 1)
+  %565 = getelementptr inbounds float, float* %556, i64 24
+  %566 = bitcast float* %565 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %566, i32 0, i32 1, i32 1)
+  %567 = getelementptr inbounds float, float* %553, i64 32
+  %568 = bitcast float* %567 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %568, i32 0, i32 1, i32 1)
+  %569 = getelementptr inbounds float, float* %556, i64 32
+  %570 = bitcast float* %569 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %570, i32 0, i32 1, i32 1)
+  %571 = bitcast float* %553 to <8 x float>*
+  %572 = load <8 x float>, <8 x float>* %571, align 1, !tbaa !12
+  %573 = or i64 %552, 8
+  %574 = getelementptr inbounds float, float* %5, i64 %573
+  %575 = bitcast float* %574 to <8 x float>*
+  %576 = load <8 x float>, <8 x float>* %575, align 1, !tbaa !12
+  %577 = or i64 %552, 16
+  %578 = getelementptr inbounds float, float* %5, i64 %577
+  %579 = bitcast float* %578 to <8 x float>*
+  %580 = load <8 x float>, <8 x float>* %579, align 1, !tbaa !12
+  %581 = or i64 %552, 24
+  %582 = getelementptr inbounds float, float* %5, i64 %581
+  %583 = bitcast float* %582 to <8 x float>*
+  %584 = load <8 x float>, <8 x float>* %583, align 1, !tbaa !12
+  %585 = add nsw i64 %552, %489
+  %586 = getelementptr inbounds float, float* %3, i64 %585
+  %587 = bitcast float* %586 to <8 x float>*
+  %588 = load <8 x float>, <8 x float>* %587, align 1, !tbaa !12
+  %589 = add nsw i64 %585, 8
+  %590 = getelementptr inbounds float, float* %3, i64 %589
+  %591 = bitcast float* %590 to <8 x float>*
+  %592 = load <8 x float>, <8 x float>* %591, align 1, !tbaa !12
+  %593 = add nsw i64 %585, 16
+  %594 = getelementptr inbounds float, float* %3, i64 %593
+  %595 = bitcast float* %594 to <8 x float>*
+  %596 = load <8 x float>, <8 x float>* %595, align 1, !tbaa !12
+  %597 = add nsw i64 %585, 24
+  %598 = getelementptr inbounds float, float* %3, i64 %597
+  %599 = bitcast float* %598 to <8 x float>*
+  %600 = load <8 x float>, <8 x float>* %599, align 1, !tbaa !12
+  %601 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %588, <8 x float> %80, <8 x float> %572) #10
+  %602 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %592, <8 x float> %80, <8 x float> %576) #10
+  %603 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %596, <8 x float> %80, <8 x float> %580) #10
+  %604 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %600, <8 x float> %80, <8 x float> %584) #10
+  store <8 x float> %601, <8 x float>* %571, align 1, !tbaa !12
+  store <8 x float> %602, <8 x float>* %575, align 1, !tbaa !12
+  store <8 x float> %603, <8 x float>* %579, align 1, !tbaa !12
+  store <8 x float> %604, <8 x float>* %583, align 1, !tbaa !12
+  %605 = add nuw nsw i64 %552, 32
+  %606 = icmp ult i64 %605, %18
+  br i1 %606, label %551, label %546
+
+607:                                              ; preds = %611
+  br i1 %20, label %608, label %914
+
+608:                                              ; preds = %607
+  %609 = trunc i64 %86 to i32
+  %610 = mul nsw i32 %9, %609
+  br label %672
+
+611:                                              ; preds = %547, %611
+  %612 = phi i64 [ 0, %547 ], [ %665, %611 ]
+  %613 = getelementptr inbounds float, float* %5, i64 %612
+  %614 = getelementptr inbounds float, float* %613, i64 8
+  %615 = bitcast float* %614 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %615, i32 0, i32 1, i32 1)
+  %616 = getelementptr inbounds float, float* %3, i64 %612
+  %617 = getelementptr inbounds float, float* %616, i64 8
+  %618 = bitcast float* %617 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %618, i32 0, i32 1, i32 1)
+  %619 = getelementptr inbounds float, float* %613, i64 16
+  %620 = bitcast float* %619 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %620, i32 0, i32 1, i32 1)
+  %621 = getelementptr inbounds float, float* %616, i64 16
+  %622 = bitcast float* %621 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %622, i32 0, i32 1, i32 1)
+  %623 = getelementptr inbounds float, float* %613, i64 24
+  %624 = bitcast float* %623 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %624, i32 0, i32 1, i32 1)
+  %625 = getelementptr inbounds float, float* %616, i64 24
+  %626 = bitcast float* %625 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %626, i32 0, i32 1, i32 1)
+  %627 = getelementptr inbounds float, float* %613, i64 32
+  %628 = bitcast float* %627 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %628, i32 0, i32 1, i32 1)
+  %629 = getelementptr inbounds float, float* %616, i64 32
+  %630 = bitcast float* %629 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %630, i32 0, i32 1, i32 1)
+  %631 = bitcast float* %613 to <8 x float>*
+  %632 = load <8 x float>, <8 x float>* %631, align 1, !tbaa !12
+  %633 = or i64 %612, 8
+  %634 = getelementptr inbounds float, float* %5, i64 %633
+  %635 = bitcast float* %634 to <8 x float>*
+  %636 = load <8 x float>, <8 x float>* %635, align 1, !tbaa !12
+  %637 = or i64 %612, 16
+  %638 = getelementptr inbounds float, float* %5, i64 %637
+  %639 = bitcast float* %638 to <8 x float>*
+  %640 = load <8 x float>, <8 x float>* %639, align 1, !tbaa !12
+  %641 = or i64 %612, 24
+  %642 = getelementptr inbounds float, float* %5, i64 %641
+  %643 = bitcast float* %642 to <8 x float>*
+  %644 = load <8 x float>, <8 x float>* %643, align 1, !tbaa !12
+  %645 = add nsw i64 %612, %550
+  %646 = getelementptr inbounds float, float* %3, i64 %645
+  %647 = bitcast float* %646 to <8 x float>*
+  %648 = load <8 x float>, <8 x float>* %647, align 1, !tbaa !12
+  %649 = add nsw i64 %645, 8
+  %650 = getelementptr inbounds float, float* %3, i64 %649
+  %651 = bitcast float* %650 to <8 x float>*
+  %652 = load <8 x float>, <8 x float>* %651, align 1, !tbaa !12
+  %653 = add nsw i64 %645, 16
+  %654 = getelementptr inbounds float, float* %3, i64 %653
+  %655 = bitcast float* %654 to <8 x float>*
+  %656 = load <8 x float>, <8 x float>* %655, align 1, !tbaa !12
+  %657 = add nsw i64 %645, 24
+  %658 = getelementptr inbounds float, float* %3, i64 %657
+  %659 = bitcast float* %658 to <8 x float>*
+  %660 = load <8 x float>, <8 x float>* %659, align 1, !tbaa !12
+  %661 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %648, <8 x float> %85, <8 x float> %632) #10
+  %662 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %652, <8 x float> %85, <8 x float> %636) #10
+  %663 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %656, <8 x float> %85, <8 x float> %640) #10
+  %664 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %660, <8 x float> %85, <8 x float> %644) #10
+  store <8 x float> %661, <8 x float>* %631, align 1, !tbaa !12
+  store <8 x float> %662, <8 x float>* %635, align 1, !tbaa !12
+  store <8 x float> %663, <8 x float>* %639, align 1, !tbaa !12
+  store <8 x float> %664, <8 x float>* %643, align 1, !tbaa !12
+  %665 = add nuw nsw i64 %612, 32
+  %666 = icmp ult i64 %665, %19
+  br i1 %666, label %611, label %607
+
+667:                                              ; preds = %672
+  br i1 %22, label %668, label %914
+
+668:                                              ; preds = %667
+  %669 = trunc i64 %91 to i32
+  %670 = mul nsw i32 %9, %669
+  %671 = sext i32 %670 to i64
+  br label %738
+
+672:                                              ; preds = %608, %672
+  %673 = phi i64 [ 0, %608 ], [ %731, %672 ]
+  %674 = getelementptr inbounds float, float* %5, i64 %673
+  %675 = getelementptr inbounds float, float* %674, i64 8
+  %676 = bitcast float* %675 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %676, i32 0, i32 1, i32 1)
+  %677 = getelementptr inbounds float, float* %3, i64 %673
+  %678 = getelementptr inbounds float, float* %677, i64 8
+  %679 = bitcast float* %678 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %679, i32 0, i32 1, i32 1)
+  %680 = getelementptr inbounds float, float* %674, i64 16
+  %681 = bitcast float* %680 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %681, i32 0, i32 1, i32 1)
+  %682 = getelementptr inbounds float, float* %677, i64 16
+  %683 = bitcast float* %682 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %683, i32 0, i32 1, i32 1)
+  %684 = getelementptr inbounds float, float* %674, i64 24
+  %685 = bitcast float* %684 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %685, i32 0, i32 1, i32 1)
+  %686 = getelementptr inbounds float, float* %677, i64 24
+  %687 = bitcast float* %686 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %687, i32 0, i32 1, i32 1)
+  %688 = getelementptr inbounds float, float* %674, i64 32
+  %689 = bitcast float* %688 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %689, i32 0, i32 1, i32 1)
+  %690 = getelementptr inbounds float, float* %677, i64 32
+  %691 = bitcast float* %690 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %691, i32 0, i32 1, i32 1)
+  %692 = bitcast float* %674 to <8 x float>*
+  %693 = load <8 x float>, <8 x float>* %692, align 1, !tbaa !12
+  %694 = or i64 %673, 8
+  %695 = getelementptr inbounds float, float* %5, i64 %694
+  %696 = bitcast float* %695 to <8 x float>*
+  %697 = load <8 x float>, <8 x float>* %696, align 1, !tbaa !12
+  %698 = or i64 %673, 16
+  %699 = getelementptr inbounds float, float* %5, i64 %698
+  %700 = bitcast float* %699 to <8 x float>*
+  %701 = load <8 x float>, <8 x float>* %700, align 1, !tbaa !12
+  %702 = or i64 %673, 24
+  %703 = getelementptr inbounds float, float* %5, i64 %702
+  %704 = bitcast float* %703 to <8 x float>*
+  %705 = load <8 x float>, <8 x float>* %704, align 1, !tbaa !12
+  %706 = trunc i64 %673 to i32
+  %707 = add nsw i32 %610, %706
+  %708 = sext i32 %707 to i64
+  %709 = getelementptr inbounds float, float* %3, i64 %708
+  %710 = bitcast float* %709 to <8 x float>*
+  %711 = load <8 x float>, <8 x float>* %710, align 1, !tbaa !12
+  %712 = add nsw i32 %707, 8
+  %713 = sext i32 %712 to i64
+  %714 = getelementptr inbounds float, float* %3, i64 %713
+  %715 = bitcast float* %714 to <8 x float>*
+  %716 = load <8 x float>, <8 x float>* %715, align 1, !tbaa !12
+  %717 = add nsw i32 %707, 16
+  %718 = sext i32 %717 to i64
+  %719 = getelementptr inbounds float, float* %3, i64 %718
+  %720 = bitcast float* %719 to <8 x float>*
+  %721 = load <8 x float>, <8 x float>* %720, align 1, !tbaa !12
+  %722 = add nsw i32 %707, 24
+  %723 = sext i32 %722 to i64
+  %724 = getelementptr inbounds float, float* %3, i64 %723
+  %725 = bitcast float* %724 to <8 x float>*
+  %726 = load <8 x float>, <8 x float>* %725, align 1, !tbaa !12
+  %727 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %711, <8 x float> %90, <8 x float> %693) #10
+  %728 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %716, <8 x float> %90, <8 x float> %697) #10
+  %729 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %721, <8 x float> %90, <8 x float> %701) #10
+  %730 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %726, <8 x float> %90, <8 x float> %705) #10
+  store <8 x float> %727, <8 x float>* %692, align 1, !tbaa !12
+  store <8 x float> %728, <8 x float>* %696, align 1, !tbaa !12
+  store <8 x float> %729, <8 x float>* %700, align 1, !tbaa !12
+  store <8 x float> %730, <8 x float>* %704, align 1, !tbaa !12
+  %731 = add nuw nsw i64 %673, 32
+  %732 = icmp ult i64 %731, %21
+  br i1 %732, label %672, label %667
+
+733:                                              ; preds = %738
+  br i1 %22, label %734, label %914
+
+734:                                              ; preds = %733
+  %735 = trunc i64 %96 to i32
+  %736 = mul nsw i32 %9, %735
+  %737 = sext i32 %736 to i64
+  br label %798
+
+738:                                              ; preds = %668, %738
+  %739 = phi i64 [ 0, %668 ], [ %792, %738 ]
+  %740 = getelementptr inbounds float, float* %5, i64 %739
+  %741 = getelementptr inbounds float, float* %740, i64 8
+  %742 = bitcast float* %741 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %742, i32 0, i32 1, i32 1)
+  %743 = getelementptr inbounds float, float* %3, i64 %739
+  %744 = getelementptr inbounds float, float* %743, i64 8
+  %745 = bitcast float* %744 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %745, i32 0, i32 1, i32 1)
+  %746 = getelementptr inbounds float, float* %740, i64 16
+  %747 = bitcast float* %746 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %747, i32 0, i32 1, i32 1)
+  %748 = getelementptr inbounds float, float* %743, i64 16
+  %749 = bitcast float* %748 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %749, i32 0, i32 1, i32 1)
+  %750 = getelementptr inbounds float, float* %740, i64 24
+  %751 = bitcast float* %750 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %751, i32 0, i32 1, i32 1)
+  %752 = getelementptr inbounds float, float* %743, i64 24
+  %753 = bitcast float* %752 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %753, i32 0, i32 1, i32 1)
+  %754 = getelementptr inbounds float, float* %740, i64 32
+  %755 = bitcast float* %754 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %755, i32 0, i32 1, i32 1)
+  %756 = getelementptr inbounds float, float* %743, i64 32
+  %757 = bitcast float* %756 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %757, i32 0, i32 1, i32 1)
+  %758 = bitcast float* %740 to <8 x float>*
+  %759 = load <8 x float>, <8 x float>* %758, align 1, !tbaa !12
+  %760 = or i64 %739, 8
+  %761 = getelementptr inbounds float, float* %5, i64 %760
+  %762 = bitcast float* %761 to <8 x float>*
+  %763 = load <8 x float>, <8 x float>* %762, align 1, !tbaa !12
+  %764 = or i64 %739, 16
+  %765 = getelementptr inbounds float, float* %5, i64 %764
+  %766 = bitcast float* %765 to <8 x float>*
+  %767 = load <8 x float>, <8 x float>* %766, align 1, !tbaa !12
+  %768 = or i64 %739, 24
+  %769 = getelementptr inbounds float, float* %5, i64 %768
+  %770 = bitcast float* %769 to <8 x float>*
+  %771 = load <8 x float>, <8 x float>* %770, align 1, !tbaa !12
+  %772 = add nsw i64 %739, %671
+  %773 = getelementptr inbounds float, float* %3, i64 %772
+  %774 = bitcast float* %773 to <8 x float>*
+  %775 = load <8 x float>, <8 x float>* %774, align 1, !tbaa !12
+  %776 = add nsw i64 %772, 8
+  %777 = getelementptr inbounds float, float* %3, i64 %776
+  %778 = bitcast float* %777 to <8 x float>*
+  %779 = load <8 x float>, <8 x float>* %778, align 1, !tbaa !12
+  %780 = add nsw i64 %772, 16
+  %781 = getelementptr inbounds float, float* %3, i64 %780
+  %782 = bitcast float* %781 to <8 x float>*
+  %783 = load <8 x float>, <8 x float>* %782, align 1, !tbaa !12
+  %784 = add nsw i64 %772, 24
+  %785 = getelementptr inbounds float, float* %3, i64 %784
+  %786 = bitcast float* %785 to <8 x float>*
+  %787 = load <8 x float>, <8 x float>* %786, align 1, !tbaa !12
+  %788 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %775, <8 x float> %95, <8 x float> %759) #10
+  %789 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %779, <8 x float> %95, <8 x float> %763) #10
+  %790 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %783, <8 x float> %95, <8 x float> %767) #10
+  %791 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %787, <8 x float> %95, <8 x float> %771) #10
+  store <8 x float> %788, <8 x float>* %758, align 1, !tbaa !12
+  store <8 x float> %789, <8 x float>* %762, align 1, !tbaa !12
+  store <8 x float> %790, <8 x float>* %766, align 1, !tbaa !12
+  store <8 x float> %791, <8 x float>* %770, align 1, !tbaa !12
+  %792 = add nuw nsw i64 %739, 32
+  %793 = icmp ult i64 %792, %23
+  br i1 %793, label %738, label %733
+
+794:                                              ; preds = %798
+  %795 = trunc i64 %101 to i32
+  %796 = mul nsw i32 %9, %795
+  %797 = sext i32 %796 to i64
+  br label %858
+
+798:                                              ; preds = %734, %798
+  %799 = phi i64 [ 0, %734 ], [ %852, %798 ]
+  %800 = getelementptr inbounds float, float* %5, i64 %799
+  %801 = getelementptr inbounds float, float* %800, i64 8
+  %802 = bitcast float* %801 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %802, i32 0, i32 1, i32 1)
+  %803 = getelementptr inbounds float, float* %3, i64 %799
+  %804 = getelementptr inbounds float, float* %803, i64 8
+  %805 = bitcast float* %804 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %805, i32 0, i32 1, i32 1)
+  %806 = getelementptr inbounds float, float* %800, i64 16
+  %807 = bitcast float* %806 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %807, i32 0, i32 1, i32 1)
+  %808 = getelementptr inbounds float, float* %803, i64 16
+  %809 = bitcast float* %808 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %809, i32 0, i32 1, i32 1)
+  %810 = getelementptr inbounds float, float* %800, i64 24
+  %811 = bitcast float* %810 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %811, i32 0, i32 1, i32 1)
+  %812 = getelementptr inbounds float, float* %803, i64 24
+  %813 = bitcast float* %812 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %813, i32 0, i32 1, i32 1)
+  %814 = getelementptr inbounds float, float* %800, i64 32
+  %815 = bitcast float* %814 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %815, i32 0, i32 1, i32 1)
+  %816 = getelementptr inbounds float, float* %803, i64 32
+  %817 = bitcast float* %816 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %817, i32 0, i32 1, i32 1)
+  %818 = bitcast float* %800 to <8 x float>*
+  %819 = load <8 x float>, <8 x float>* %818, align 1, !tbaa !12
+  %820 = or i64 %799, 8
+  %821 = getelementptr inbounds float, float* %5, i64 %820
+  %822 = bitcast float* %821 to <8 x float>*
+  %823 = load <8 x float>, <8 x float>* %822, align 1, !tbaa !12
+  %824 = or i64 %799, 16
+  %825 = getelementptr inbounds float, float* %5, i64 %824
+  %826 = bitcast float* %825 to <8 x float>*
+  %827 = load <8 x float>, <8 x float>* %826, align 1, !tbaa !12
+  %828 = or i64 %799, 24
+  %829 = getelementptr inbounds float, float* %5, i64 %828
+  %830 = bitcast float* %829 to <8 x float>*
+  %831 = load <8 x float>, <8 x float>* %830, align 1, !tbaa !12
+  %832 = add nsw i64 %799, %737
+  %833 = getelementptr inbounds float, float* %3, i64 %832
+  %834 = bitcast float* %833 to <8 x float>*
+  %835 = load <8 x float>, <8 x float>* %834, align 1, !tbaa !12
+  %836 = add nsw i64 %832, 8
+  %837 = getelementptr inbounds float, float* %3, i64 %836
+  %838 = bitcast float* %837 to <8 x float>*
+  %839 = load <8 x float>, <8 x float>* %838, align 1, !tbaa !12
+  %840 = add nsw i64 %832, 16
+  %841 = getelementptr inbounds float, float* %3, i64 %840
+  %842 = bitcast float* %841 to <8 x float>*
+  %843 = load <8 x float>, <8 x float>* %842, align 1, !tbaa !12
+  %844 = add nsw i64 %832, 24
+  %845 = getelementptr inbounds float, float* %3, i64 %844
+  %846 = bitcast float* %845 to <8 x float>*
+  %847 = load <8 x float>, <8 x float>* %846, align 1, !tbaa !12
+  %848 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %835, <8 x float> %100, <8 x float> %819) #10
+  %849 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %839, <8 x float> %100, <8 x float> %823) #10
+  %850 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %843, <8 x float> %100, <8 x float> %827) #10
+  %851 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %847, <8 x float> %100, <8 x float> %831) #10
+  store <8 x float> %848, <8 x float>* %818, align 1, !tbaa !12
+  store <8 x float> %849, <8 x float>* %822, align 1, !tbaa !12
+  store <8 x float> %850, <8 x float>* %826, align 1, !tbaa !12
+  store <8 x float> %851, <8 x float>* %830, align 1, !tbaa !12
+  %852 = add nuw nsw i64 %799, 32
+  %853 = icmp ult i64 %852, %24
+  br i1 %853, label %798, label %794
+
+854:                                              ; preds = %858
+  %855 = trunc i64 %106 to i32
+  %856 = mul nsw i32 %9, %855
+  %857 = sext i32 %856 to i64
+  br label %917
+
+858:                                              ; preds = %794, %858
+  %859 = phi i64 [ 0, %794 ], [ %912, %858 ]
+  %860 = getelementptr inbounds float, float* %5, i64 %859
+  %861 = getelementptr inbounds float, float* %860, i64 8
+  %862 = bitcast float* %861 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %862, i32 0, i32 1, i32 1)
+  %863 = getelementptr inbounds float, float* %3, i64 %859
+  %864 = getelementptr inbounds float, float* %863, i64 8
+  %865 = bitcast float* %864 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %865, i32 0, i32 1, i32 1)
+  %866 = getelementptr inbounds float, float* %860, i64 16
+  %867 = bitcast float* %866 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %867, i32 0, i32 1, i32 1)
+  %868 = getelementptr inbounds float, float* %863, i64 16
+  %869 = bitcast float* %868 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %869, i32 0, i32 1, i32 1)
+  %870 = getelementptr inbounds float, float* %860, i64 24
+  %871 = bitcast float* %870 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %871, i32 0, i32 1, i32 1)
+  %872 = getelementptr inbounds float, float* %863, i64 24
+  %873 = bitcast float* %872 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %873, i32 0, i32 1, i32 1)
+  %874 = getelementptr inbounds float, float* %860, i64 32
+  %875 = bitcast float* %874 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %875, i32 0, i32 1, i32 1)
+  %876 = getelementptr inbounds float, float* %863, i64 32
+  %877 = bitcast float* %876 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %877, i32 0, i32 1, i32 1)
+  %878 = bitcast float* %860 to <8 x float>*
+  %879 = load <8 x float>, <8 x float>* %878, align 1, !tbaa !12
+  %880 = or i64 %859, 8
+  %881 = getelementptr inbounds float, float* %5, i64 %880
+  %882 = bitcast float* %881 to <8 x float>*
+  %883 = load <8 x float>, <8 x float>* %882, align 1, !tbaa !12
+  %884 = or i64 %859, 16
+  %885 = getelementptr inbounds float, float* %5, i64 %884
+  %886 = bitcast float* %885 to <8 x float>*
+  %887 = load <8 x float>, <8 x float>* %886, align 1, !tbaa !12
+  %888 = or i64 %859, 24
+  %889 = getelementptr inbounds float, float* %5, i64 %888
+  %890 = bitcast float* %889 to <8 x float>*
+  %891 = load <8 x float>, <8 x float>* %890, align 1, !tbaa !12
+  %892 = add nsw i64 %859, %797
+  %893 = getelementptr inbounds float, float* %3, i64 %892
+  %894 = bitcast float* %893 to <8 x float>*
+  %895 = load <8 x float>, <8 x float>* %894, align 1, !tbaa !12
+  %896 = add nsw i64 %892, 8
+  %897 = getelementptr inbounds float, float* %3, i64 %896
+  %898 = bitcast float* %897 to <8 x float>*
+  %899 = load <8 x float>, <8 x float>* %898, align 1, !tbaa !12
+  %900 = add nsw i64 %892, 16
+  %901 = getelementptr inbounds float, float* %3, i64 %900
+  %902 = bitcast float* %901 to <8 x float>*
+  %903 = load <8 x float>, <8 x float>* %902, align 1, !tbaa !12
+  %904 = add nsw i64 %892, 24
+  %905 = getelementptr inbounds float, float* %3, i64 %904
+  %906 = bitcast float* %905 to <8 x float>*
+  %907 = load <8 x float>, <8 x float>* %906, align 1, !tbaa !12
+  %908 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %895, <8 x float> %105, <8 x float> %879) #10
+  %909 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %899, <8 x float> %105, <8 x float> %883) #10
+  %910 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %903, <8 x float> %105, <8 x float> %887) #10
+  %911 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %907, <8 x float> %105, <8 x float> %891) #10
+  store <8 x float> %908, <8 x float>* %878, align 1, !tbaa !12
+  store <8 x float> %909, <8 x float>* %882, align 1, !tbaa !12
+  store <8 x float> %910, <8 x float>* %886, align 1, !tbaa !12
+  store <8 x float> %911, <8 x float>* %890, align 1, !tbaa !12
+  %912 = add nuw nsw i64 %859, 32
+  %913 = icmp slt i64 %912, %25
+  br i1 %913, label %858, label %854
+
+914:                                              ; preds = %917, %667, %40, %114, %180, %241, %302, %363, %424, %485, %546, %607, %733
+  %915 = add nuw nsw i64 %41, 14
+  %916 = icmp slt i64 %915, %27
+  br i1 %916, label %40, label %28
+
+917:                                              ; preds = %854, %917
+  %918 = phi i64 [ 0, %854 ], [ %971, %917 ]
+  %919 = getelementptr inbounds float, float* %5, i64 %918
+  %920 = getelementptr inbounds float, float* %919, i64 8
+  %921 = bitcast float* %920 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %921, i32 0, i32 1, i32 1)
+  %922 = getelementptr inbounds float, float* %3, i64 %918
+  %923 = getelementptr inbounds float, float* %922, i64 8
+  %924 = bitcast float* %923 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %924, i32 0, i32 1, i32 1)
+  %925 = getelementptr inbounds float, float* %919, i64 16
+  %926 = bitcast float* %925 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %926, i32 0, i32 1, i32 1)
+  %927 = getelementptr inbounds float, float* %922, i64 16
+  %928 = bitcast float* %927 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %928, i32 0, i32 1, i32 1)
+  %929 = getelementptr inbounds float, float* %919, i64 24
+  %930 = bitcast float* %929 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %930, i32 0, i32 1, i32 1)
+  %931 = getelementptr inbounds float, float* %922, i64 24
+  %932 = bitcast float* %931 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %932, i32 0, i32 1, i32 1)
+  %933 = getelementptr inbounds float, float* %919, i64 32
+  %934 = bitcast float* %933 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %934, i32 0, i32 1, i32 1)
+  %935 = getelementptr inbounds float, float* %922, i64 32
+  %936 = bitcast float* %935 to i8*
+  tail call void @llvm.prefetch.p0i8(i8* nonnull %936, i32 0, i32 1, i32 1)
+  %937 = bitcast float* %919 to <8 x float>*
+  %938 = load <8 x float>, <8 x float>* %937, align 1, !tbaa !12
+  %939 = or i64 %918, 8
+  %940 = getelementptr inbounds float, float* %5, i64 %939
+  %941 = bitcast float* %940 to <8 x float>*
+  %942 = load <8 x float>, <8 x float>* %941, align 1, !tbaa !12
+  %943 = or i64 %918, 16
+  %944 = getelementptr inbounds float, float* %5, i64 %943
+  %945 = bitcast float* %944 to <8 x float>*
+  %946 = load <8 x float>, <8 x float>* %945, align 1, !tbaa !12
+  %947 = or i64 %918, 24
+  %948 = getelementptr inbounds float, float* %5, i64 %947
+  %949 = bitcast float* %948 to <8 x float>*
+  %950 = load <8 x float>, <8 x float>* %949, align 1, !tbaa !12
+  %951 = add nsw i64 %918, %857
+  %952 = getelementptr inbounds float, float* %3, i64 %951
+  %953 = bitcast float* %952 to <8 x float>*
+  %954 = load <8 x float>, <8 x float>* %953, align 1, !tbaa !12
+  %955 = add nsw i64 %951, 8
+  %956 = getelementptr inbounds float, float* %3, i64 %955
+  %957 = bitcast float* %956 to <8 x float>*
+  %958 = load <8 x float>, <8 x float>* %957, align 1, !tbaa !12
+  %959 = add nsw i64 %951, 16
+  %960 = getelementptr inbounds float, float* %3, i64 %959
+  %961 = bitcast float* %960 to <8 x float>*
+  %962 = load <8 x float>, <8 x float>* %961, align 1, !tbaa !12
+  %963 = add nsw i64 %951, 24
+  %964 = getelementptr inbounds float, float* %3, i64 %963
+  %965 = bitcast float* %964 to <8 x float>*
+  %966 = load <8 x float>, <8 x float>* %965, align 1, !tbaa !12
+  %967 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %954, <8 x float> %110, <8 x float> %938) #10
+  %968 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %958, <8 x float> %110, <8 x float> %942) #10
+  %969 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %962, <8 x float> %110, <8 x float> %946) #10
+  %970 = tail call <8 x float> @llvm.fma.v8f32(<8 x float> %966, <8 x float> %110, <8 x float> %950) #10
+  store <8 x float> %967, <8 x float>* %937, align 1, !tbaa !12
+  store <8 x float> %968, <8 x float>* %941, align 1, !tbaa !12
+  store <8 x float> %969, <8 x float>* %945, align 1, !tbaa !12
+  store <8 x float> %970, <8 x float>* %949, align 1, !tbaa !12
+  %971 = add nuw nsw i64 %918, 32
+  %972 = icmp slt i64 %971, %26
+  br i1 %972, label %917, label %914
+}
+
+; Function Attrs: nounwind
+declare i64 @llvm.x86.rdtsc() #10
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memcpy.p0i8.p0i8.i64(i8* noalias nocapture writeonly, i8* noalias nocapture readonly, i64, i1 immarg) #3
+
+; Function Attrs: inaccessiblemem_or_argmemonly nounwind willreturn
+declare void @llvm.prefetch.p0i8(i8* nocapture readonly, i32 immarg, i32 immarg, i32) #11
+
+; Function Attrs: norecurse nounwind readnone uwtable
+define dso_local zeroext i1 @_Z6enablev() local_unnamed_addr #12 {
+  ret i1 false
+}
+
+; Function Attrs: norecurse nounwind readnone uwtable
+define dso_local i32 @_Z9n_reg_maxv() local_unnamed_addr #12 {
+  ret i32 126
+}
+
+; Function Attrs: nobuiltin nounwind
+declare dso_local void @_ZdlPv(i8*) local_unnamed_addr #13
+
+; Function Attrs: noreturn
+declare dso_local void @_ZSt19__throw_logic_errorPKc(i8*) local_unnamed_addr #14
+
+declare dso_local i8* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_createERmm(%"class.std::__cxx11::basic_string"*, i64* dereferenceable(8), i64) local_unnamed_addr #0
+
+declare dso_local dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE9_M_appendEPKcm(%"class.std::__cxx11::basic_string"*, i8*, i64) local_unnamed_addr #0
+
+; Function Attrs: argmemonly nofree nounwind readonly
+declare dso_local i64 @strlen(i8* nocapture) local_unnamed_addr #15
+
+; Function Attrs: noreturn
+declare dso_local void @_ZSt20__throw_length_errorPKc(i8*) local_unnamed_addr #14
+
+; Function Attrs: nounwind readnone speculatable willreturn
+declare <8 x float> @llvm.fma.v8f32(<8 x float>, <8 x float>, <8 x float>) #16
+
+; Function Attrs: uwtable
+define internal void @_GLOBAL__sub_I_matvec_ui4_uk14.cpp() #17 section ".text.startup" personality i32 (...)* @__gxx_personality_v0 {
+  tail call void @_ZNSt8ios_base4InitC1Ev(%"class.std::ios_base::Init"* nonnull @_ZStL8__ioinit)
+  %1 = tail call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::ios_base::Init"*)* @_ZNSt8ios_base4InitD1Ev to void (i8*)*), i8* getelementptr inbounds (%"class.std::ios_base::Init", %"class.std::ios_base::Init"* @_ZStL8__ioinit, i64 0, i32 0), i8* nonnull @__dso_handle) #10
+  store %union.anon* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL15InstructionTypeB5cxx11E, i64 0, i32 2), %union.anon** bitcast (%"class.std::__cxx11::basic_string"* @_ZN4mippL15InstructionTypeB5cxx11E to %union.anon**), align 8, !tbaa !2
+  tail call void @llvm.memcpy.p0i8.p0i8.i64(i8* nonnull align 8 dereferenceable(3) bitcast (%union.anon* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL15InstructionTypeB5cxx11E, i64 0, i32 2) to i8*), i8* nonnull align 1 dereferenceable(3) getelementptr inbounds ([4 x i8], [4 x i8]* @.str, i64 0, i64 0), i64 3, i1 false) #10
+  store i64 3, i64* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL15InstructionTypeB5cxx11E, i64 0, i32 1), align 8, !tbaa !10
+  store i8 0, i8* getelementptr inbounds (i8, i8* bitcast (%union.anon* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL15InstructionTypeB5cxx11E, i64 0, i32 2) to i8*), i64 3), align 1, !tbaa !12
+  %2 = tail call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::__cxx11::basic_string"*)* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED2Ev to void (i8*)*), i8* bitcast (%"class.std::__cxx11::basic_string"* @_ZN4mippL15InstructionTypeB5cxx11E to i8*), i8* nonnull @__dso_handle) #10
+  tail call void @_ZStplIcSt11char_traitsIcESaIcEENSt7__cxx1112basic_stringIT_T0_T1_EERKS8_PKS5_(%"class.std::__cxx11::basic_string"* nonnull sret @_ZN4mippL19InstructionFullTypeB5cxx11E, %"class.std::__cxx11::basic_string"* nonnull dereferenceable(32) @_ZN4mippL15InstructionTypeB5cxx11E, i8* getelementptr inbounds ([2 x i8], [2 x i8]* @.str.3, i64 0, i64 0))
+  %3 = tail call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::__cxx11::basic_string"*)* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED2Ev to void (i8*)*), i8* bitcast (%"class.std::__cxx11::basic_string"* @_ZN4mippL19InstructionFullTypeB5cxx11E to i8*), i8* nonnull @__dso_handle) #10
+  store %union.anon* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL18InstructionVersionB5cxx11E, i64 0, i32 2), %union.anon** bitcast (%"class.std::__cxx11::basic_string"* @_ZN4mippL18InstructionVersionB5cxx11E to %union.anon**), align 8, !tbaa !2
+  store i8 50, i8* bitcast (%union.anon* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL18InstructionVersionB5cxx11E, i64 0, i32 2) to i8*), align 8, !tbaa !12
+  store i64 1, i64* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL18InstructionVersionB5cxx11E, i64 0, i32 1), align 8, !tbaa !10
+  store i8 0, i8* getelementptr inbounds (i8, i8* bitcast (%union.anon* getelementptr inbounds (%"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* @_ZN4mippL18InstructionVersionB5cxx11E, i64 0, i32 2) to i8*), i64 1), align 1, !tbaa !12
+  %4 = tail call i32 @__cxa_atexit(void (i8*)* bitcast (void (%"class.std::__cxx11::basic_string"*)* @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED2Ev to void (i8*)*), i8* bitcast (%"class.std::__cxx11::basic_string"* @_ZN4mippL18InstructionVersionB5cxx11E to i8*), i8* nonnull @__dso_handle) #10
+  ret void
+}
+
+; Function Attrs: argmemonly nounwind willreturn
+declare void @llvm.memset.p0i8.i64(i8* nocapture writeonly, i8, i64, i1 immarg) #3
+
+attributes #0 = { "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #1 = { nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #2 = { nofree nounwind }
+attributes #3 = { argmemonly nounwind willreturn }
+attributes #4 = { nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #5 = { inlinehint uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #6 = { nofree nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #7 = { nofree nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #8 = { nofree norecurse nounwind uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #9 = { uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="256" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #10 = { nounwind }
+attributes #11 = { inaccessiblemem_or_argmemonly nounwind willreturn }
+attributes #12 = { norecurse nounwind readnone uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #13 = { nobuiltin nounwind "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #14 = { noreturn "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #15 = { argmemonly nofree nounwind readonly "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "no-infs-fp-math"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #16 = { nounwind readnone speculatable willreturn }
+attributes #17 = { uwtable "correctly-rounded-divide-sqrt-fp-math"="false" "disable-tail-calls"="false" "frame-pointer"="none" "less-precise-fpmad"="false" "min-legal-vector-width"="0" "no-infs-fp-math"="false" "no-jump-tables"="false" "no-nans-fp-math"="false" "no-signed-zeros-fp-math"="false" "no-trapping-math"="false" "stack-protector-buffer-size"="8" "target-cpu"="znver1" "target-features"="+64bit,+adx,+aes,+avx,+avx2,+bmi,+bmi2,+clflushopt,+clzero,+cmov,+cx16,+cx8,+f16c,+fma,+fsgsbase,+fxsr,+lzcnt,+mmx,+movbe,+mwaitx,+pclmul,+popcnt,+prfchw,+rdrnd,+rdseed,+sahf,+sha,+sse,+sse2,+sse3,+sse4.1,+sse4.2,+sse4a,+ssse3,+x87,+xsave,+xsavec,+xsaveopt,+xsaves,-avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512er,-avx512f,-avx512ifma,-avx512pf,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vp2intersect,-avx512vpopcntdq,-cldemote,-clwb,-enqcmd,-fma4,-gfni,-invpcid,-lwp,-movdir64b,-movdiri,-pconfig,-pku,-prefetchwt1,-ptwrite,-rdpid,-rtm,-sgx,-shstk,-tbm,-vaes,-vpclmulqdq,-waitpkg,-wbnoinvd,-xop" "unsafe-fp-math"="false" "use-soft-float"="false" }
+attributes #18 = { noreturn }
+
+!llvm.module.flags = !{!0}
+!llvm.ident = !{!1}
+
+!0 = !{i32 1, !"wchar_size", i32 4}
+!1 = !{!"clang version 10.0.0-4ubuntu1 "}
+!2 = !{!3, !4, i64 0}
+!3 = !{!"_ZTSNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE12_Alloc_hiderE", !4, i64 0}
+!4 = !{!"any pointer", !5, i64 0}
+!5 = !{!"omnipotent char", !6, i64 0}
+!6 = !{!"Simple C++ TBAA"}
+!7 = !{!8, !4, i64 0}
+!8 = !{!"_ZTSNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE", !3, i64 0, !9, i64 8, !5, i64 16}
+!9 = !{!"long", !5, i64 0}
+!10 = !{!8, !9, i64 8}
+!11 = !{!9, !9, i64 0}
+!12 = !{!5, !5, i64 0}
+!13 = !{!14, !14, i64 0}
+!14 = !{!"int", !5, i64 0}
+!15 = !{!4, !4, i64 0}
+!16 = distinct !{!16, !17}
+!17 = !{!"llvm.loop.vectorize.width", i32 1}
+!18 = !{!19, !19, i64 0}
+!19 = !{!"float", !5, i64 0}
+!20 = distinct !{!20, !17}
+!21 = distinct !{!21, !17}

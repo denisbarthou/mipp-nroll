@@ -13,7 +13,7 @@ RUN_OMP_NUM_THREADS="2"
 BOUND_CORE="3"
 
 pdf_proc="AMD RYZEN 5"
-pdf_hight="25"
+pdf_hight="8"
 
 
 
@@ -22,6 +22,7 @@ pdf_hight="25"
 
 
 #========= fixed params and code begin =========
+
 
 FILE=""
 FULL_PARAMS=""
@@ -53,6 +54,8 @@ NO_COLOR="\033[0m"
 
 RUN_FLOP=""
 RUN_MAX_REG=""
+
+echo -e "$THREAD_COLOR  /!\\ DO NOT FORGET DO DISABLE TURBOBOOST /!\\  $NO_COLOR"
 
 function parse_run()
 {
@@ -302,6 +305,7 @@ then
 	echo "usage: >>autobench.sh JINJA_BENCH.cpp NOM_PARAM1 MIN_VALUE_PARAM1 MAX_VALUE_PARAM1 NOM_PARAM12MIN_VALUE_PARAM2 MAX_VALUE_PARAM2 ..."
 	echo "jinja_bench.cpp doit être au format jinja"
 	echo "jinja_bench.cpp doit respecter le header scripts/runner.hpp"
+	exit
 fi
 
 

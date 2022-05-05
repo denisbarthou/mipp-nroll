@@ -27,6 +27,12 @@ int main()
 {
 	init();
 
+	if(!enable())
+	{
+		cout<<"none"<<endl;
+		return 0;
+	}
+
 	vector<float> time;
 	float tmp_time=0.0;
 
@@ -41,14 +47,9 @@ int main()
 
 	float max_value=v_max(time);
 
-	if(enable())
-	{
-		cout<<max_value<<" "<<n_reg_max()<<endl;
-	}
-	else
-	{
-		cout<<"none"<<endl;
-	}
+
+	cout<<max_value<<" "<<n_reg_max()<<endl;
+
 
 	return 0;
 }
