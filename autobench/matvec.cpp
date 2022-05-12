@@ -3,8 +3,8 @@
 
 #define TYPE float
 
-static int BLOCKI=256;
-static int BLOCKK=256;
+static int BLOCKI=1024;
+static int BLOCKK=1024;
 
 static TYPE *vA;
 static TYPE *vB;
@@ -58,47 +58,58 @@ float bench()
 		b0_{{ kk }}=mipp::set1<TYPE>(B[k+ {{ kk }} ]);
 		{% endfor %}
 
-		{% for kk in range(opt.uk) -%}
+		
 		for (int i=0;i<BLOCKI;i+=({{ opt.ui }})*nv) 
 		{         
 			{% for ii in range(opt.ui) -%}
-			mipp::Reg<TYPE> c{{ ii }}_{{ kk }}, a{{ ii }}_{{ kk }};
+			mipp::Reg<TYPE> c{{ ii }};
 			{% endfor %}
-			
+
+			{% for kk in range(opt.uk) -%}
+			{% for ii in range(opt.ui) -%}
+			mipp::Reg<TYPE> a{{ ii }}_{{ kk }};
+			{% endfor %}
+			{%- endfor -%}
+
+			/*
 			{% for ii in range(opt.ui) -%}
 			_mm_prefetch(C+i+({{ ii }}+1)*nv ,1);
 			_mm_prefetch(A+i+({{ ii }}+1)*nv ,1);
 			{% endfor %}
-			
+			*/
+
 			{% for ii in range(opt.ui) -%}
-			c{{ ii }}_{{ kk }}.load(&C[i+{{ ii }}*nv]);
+			c{{ ii }}.load(&C[i+{{ ii }}*nv]);
 			{% endfor %}
 
+			{% for kk in range(opt.uk) -%}
 			{% for ii in range(opt.ui) -%}
 			a{{ ii }}_{{ kk }}.load(&A[BLOCKI*(k+ {{ kk }} ) + i+{{ ii }}*nv]);
 			{% endfor %}
+			{%- endfor -%}
 
+			{% for kk in range(opt.uk) -%}
 			{% for ii in range(opt.ui) -%}
-			c{{ ii }}_{{ kk }} = mipp::fmadd(a{{ ii }}_{{ kk }}, b0_{{ kk }},c{{ ii }}_{{ kk }});
+			c{{ ii }} = mipp::fmadd(a{{ ii }}_{{ kk }}, b0_{{ kk }},c{{ ii }});
 			{% endfor %}
+			{%- endfor -%}
 
 			{% for ii in range(opt.ui) -%}
-			c{{ ii }}_{{ kk }}.store(&C[i+{{ ii }}*nv]);
+			c{{ ii }}.store(&C[i+{{ ii }}*nv]);
 			{% endfor %}
 		}
-		{%- endfor -%}
 
 	}    
 	time=__rdtsc()-time;
 
-	return ((float)(BLOCKI*(BLOCKK+BLOCKK-1)))/((float)time);
+	return ((float)(BLOCKI*(BLOCKK+BLOCKK)))/((float)time);
 }
 
 bool enable()
 {
 	int i={{ opt.ui }};
 	int k={{ opt.uk }};
-	if(i*k>32 || mippN*i*k>BLOCKI || k>BLOCKK)
+	if(i*k>32 || mippN*i>BLOCKI || k>BLOCKK)
 	{
 		return false;
 	}
@@ -109,5 +120,5 @@ int n_reg_max()
 {
 	int i={{ opt.ui }};
 	int k={{ opt.uk }};
-	return k+k*2*i;
+	return k+i+k*i;
 }
