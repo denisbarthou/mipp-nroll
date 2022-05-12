@@ -1,0 +1,12 @@
+set term pdf
+set output "../pdf/matvec_fewstores_ui_1_2_uk_1_32.pdf"
+set nokey
+unset colorbox
+set title "matvec_fewstores Performance used on AMD RYZEN 5 with clang++ / greedy \nThe unroll is ui 1 2 uk 1 32 \n(clang version 10.0.0-4ubuntu1 )"
+set ylabel "Flops [DP]/cycle"
+set xlabel "registers and spill used"
+set style fill transparent solid 0.3
+set style circle radius 0.3
+set palette defined ( 0 "#0000FF", 1 "#FF0000" )
+plot '< echo "16 8"' w impulse lc rgb "red", "data/dat.txt" using ($7+$9):5:($11>16?1:0) with circles palette
+quit

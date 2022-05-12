@@ -1,0 +1,15 @@
+max_reg 21
+max_reg 23
+max_reg 25
+max_reg 27
+max_reg 29
+max_reg 31
+max_reg 3
+max_reg 5
+max_reg 7
+max_reg 9
+max_reg 11
+max_reg 13
+max_reg 15
+max_reg 17
+max_reg 19
