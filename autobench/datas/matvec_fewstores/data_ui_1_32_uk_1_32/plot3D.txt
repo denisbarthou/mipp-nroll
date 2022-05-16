@@ -1,0 +1,13 @@
+set term pdf
+set output "matvec_fewstores_ui_1_32_uk_1_32.pdf"
+set nokey
+set title "matvec fewstores Performance used on AMD RYZEN 5 with clang++ / greedy \nThe unroll is ui 1 16 uk 1 16 \n(clang version 10.0.0-4ubuntu1 )"
+set zlabel "Flops\nbby cycles"
+set xlabel "unroll j"
+set ylabel "unroll k"
+set style fill transparent solid 10.0
+set dgrid3d 256,256
+set pm3d
+set palette defined (0 "black",3 "black", 4 "blue", 5 "orange", 8 "red")
+splot "dat.txt" using 3:4:5 with pm3d
+quit

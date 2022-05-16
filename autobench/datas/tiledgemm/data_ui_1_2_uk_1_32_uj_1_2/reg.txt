@@ -1,0 +1,15 @@
+tiledgemm_ui1_uk10_uj1 11
+tiledgemm_ui1_uk11_uj1 3
+tiledgemm_ui1_uk12_uj1 3
+tiledgemm_ui1_uk13_uj1 3
+tiledgemm_ui1_uk14_uj1 3
+tiledgemm_ui1_uk15_uj1 3
+tiledgemm_ui1_uk1_uj1 2
+tiledgemm_ui1_uk2_uj1 3
+tiledgemm_ui1_uk3_uj1 4
+tiledgemm_ui1_uk4_uj1 5
+tiledgemm_ui1_uk5_uj1 6
+tiledgemm_ui1_uk6_uj1 7
+tiledgemm_ui1_uk7_uj1 8
+tiledgemm_ui1_uk8_uj1 9
+tiledgemm_ui1_uk9_uj1 10
