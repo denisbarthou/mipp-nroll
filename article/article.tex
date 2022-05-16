@@ -3,10 +3,10 @@
 %===========================================================
 % Une des quatre options 'parallelisme', 'architecture', 'systeme' 
 % 'tempsreel' doit Ãªtre utilisÃ©e avec le style compas2021
-\documentclass[sigconf,review]{acmart}
+\documentclass{article}
 
 \usepackage{listings}
-\usepackage{algorithmicx}
+\usepackage{algorithmicx,fullpage}
 \usepackage[noend]{algpseudocode}
 \usepackage{algorithm,hhline}
 \usepackage{graphicx}
@@ -57,32 +57,20 @@
 
 \title{Exploring Vectorization and unrolling with SMT}
 
-\author{Denis Barthou}
-\affiliation{\institution{Bordeaux Institute of Technology} \city{Bordeaux} \country{France}}
-\author{Edgar Baucher}
-\affiliation{\institution{Bordeaux Institute of Technology} \city{Bordeaux} \country{France}}
-\author{Ahmed-Manaf Dhamani}
-\affiliation{\institution{Bordeaux Institute of Technology} \city{Bordeaux} \country{France}}
-\author{William Jalby}
-\affiliation{\institution{University of Versailles Saint Quentin} \city{Versailles} \country{France}}
+%\affiliation{\institution{Bordeaux Institute of Technology} \city{Bordeaux} \country{France}}
+%\affiliation{\institution{Bordeaux Institute of Technology} \city{Bordeaux} \country{France}}
+\author{Denis Barthou \and Edgar Baucher \and Ahmed-Manaf Dhamani \and William Jalby}
+%\affiliation{\institution{University of Versailles Saint Quentin} \city{Versailles} \country{France}}
 
 
 %\date{\today}
-
-%===========================================================         %
-%Abstract
-%===========================================================  
-\begin{abstract}
-  
-\end{abstract}
-\keywords{}
 
 \maketitle
 
 
 
 \section{Introduction}
-The high performance kernels require multiple optimizations. We do not
+High performance kernels require multiple optimizations, that can be performed by the compiler for many of them, and by the expert user for some of them. We do not
 focus particularly on codes from libraries, but rather on kernels from
 applications. One of the objectives is to study how to generate
 efficient source code, while still keeping the code portable,
@@ -93,33 +81,34 @@ allows portability, maintenance and composability.
 
 Many optimizations at the loop level and targeting cache/memory
 hierarchy are well known and can be handled by dedicated compiler
-optimizations. We will focus here on code optimizations for codes that
-run in a tile of data fitting in cache (or that does not have
-reuse). Essentially, the optimizations concerned are instruction
-scheduling (notably through loop transformations), SIMDization,
-register allocation. Besides, we assume the user selects SIMD
-instructions, using for instance a library such as the C++ MIPP
-wrapper \cite{mipp}. We therefore focus on a very narrow optimization
-space, playing only with loop unrolling and letting to the compiler
-deal with instruction scheduling and register allocation.  The
-advantage of this approach is that this is only source code and
-compiler variations, hence allows composition of codes.  The
-particularities of the kernels and vectorization with MIPP are
-recalled here:
+optimizations. Let us focus here on code optimizations for codes that
+run in a tile fitting in cache (or that does not have
+reuse) and we assumed the code has been SIMDized by the user, resorting to a library such as the C++ MIPP
+wrapper \cite{mipp} in order to ensure portability accross multiple architectures. We therefore focus on a very narrow optimization
+space at compiler level, namely instruction
+scheduling, loop transformations (within the tile) and
+register allocation, all of them having been the subject of many related works in the past. For matrix product for instance, ATLAS \cite{atlas}, published 21 years ago, proposed automatic tuning of matrix product codes, including register blocking and loop transformations, but some initial work \cite{JalbyM86} tackles the matrix multiplication hand-tuning even 15 years before ATLAS. Since then, hardware mechanisms such as  out of order execution, register renaming have been expected to mitigate the effect of  instruction scheduling and register blocking  optimizations. This study has therefore the following objectives:
+\begin{itemize}
+\item Determine if there is any impact still of instruction scheduling at the source level on performance 
+\item Determine if there is a simple criterion deciding the unrolling factor of a code, and if it is portable accross architectures, compilers
+\end{itemize}
+
+
+The
+particularities of the source code kernels we consider are listed here:
 \begin{itemize}
   \item Vector instructions will be parametrized by their length VL (expressed in elements) so the code should be generic and cover all possible Vector Lengths
-\item All instructions will be not differentiated with respect to DP versus SP. It will be the optimizer which will take care of that specialization.
-\item All arithmetic instructions will operate between registers (à la ARM): no operand coming from memory can be used in an arithmetic instruction. Potentially, this characteristic increases register pressure where a combined load/arithmetic operation could avoid unnecessary use of registers. This characteristic is compatible though with C++ library such as MIPP. 
-\item All arithmetic instructions will use only Vector Registers as main operands no scalar registers can be used. This will require the use of Broadcast instructions to promote a scalar to vector.
+\item All instructions will be not differentiated with respect to DP versus SP. 
+\item All arithmetic instructions will operate between registers (à la ARM): no operand coming from memory can be used in an arithmetic instruction. The compiler still has the possibility to rewrite a load and a computation into a computation using an address. 
 \item We will use a Vector Reduction (denoted VRED) instruction capable of summing all of the components of a vector register. Such an instruction is available in ARM ISA but currently it requires a chain of between 4 and 6 instructions on X86
-\item The code to by duplicated (through unrolling) will be enclosed between curly brackets. 
+\item The code to be duplicated (through unrolling) will be enclosed between curly brackets. 
 \item The instruction selection for vectorized code is assumed to be done by the user through MIPP. Indeed, while efficient instruction selection methods exist in current compilers, this is still limited to linear algebra codes. MIPP (or existing alternatives) removes this issue by proposing a wider access to intrinsics SIMD instructions.
 \end{itemize}
-Instruction scheduling and register allocation are two key optimizations that must be performed in order to reach high level performance code. Two possibilities: either the user specifies in high level ASM both of them, or the compiler is in charge. 
 
 \section{Matrix product, stored row-wise}
-The matrx code is a kernel for libraries, but still there may be occurences of special matrix sizes that are not perfectly addressed by libraries. We will start with small rectangular bloc sizes first. In the code presented in Fig.\ref{fig:gemm}, all loops are potentially unrolled. Variables \texttt{ui}, \texttt{uj}, \texttt{uk}
-are indices corresponding to the unrolling factors. The unrolling on k
+The matrix code is a kernel for libraries, but still there may be occurences of special matrix sizes that are not perfectly addressed by libraries. We will start with small rectangular bloc sizes first, multiplying a matrix of size $BLOCKI\times BLOCKK$ by a matrix of size $BLOCKK \times BLOCKJ$. We provide to the compiler a very naive code, where the loop are ordered i,j,k, the vectorization is explicit through MIPP, and unrolling is achieved in the source code annotations. The objective is to compare the behavior of the different unrolling factors, and observe how it affects register blocking In the code presented in Fig.\ref{fig:gemm}
+
+The unrolling on k
 produces a sequence of FMAs. This does not improve ILP for FMA but
 this enhances register reuse and can help to hide other instruction
 latencies (loads).  There is no tail code on purpose, the sizes BI,
@@ -130,13 +119,13 @@ have been explored to evaluate the capacity of the compilers to
 allocate registers and reschedule. We have limited the exploration of
 the register block size $UI*UJ+UI*UK+UJ*UK$ so that it does not exceed
 twice the amount of SIMD registers (so 64 for AVX512, 32 for AVX), and
-$UJ*VL$ should not exceed the size of the dimension BJ.  The type of the elements are defined by \texttt{TYPE} . The above code
+$UJ*VL$ should not exceed the size of the dimension BJ. Note that usually the number of physical registers exceed by more than a factor of two the number of virtual registers. The type of the elements are defined by \texttt{TYPE} . The above code
 is written using a template mechanism that is instantiated
 into C++ code for all unrolling factors.  The first machine of the
 evaluation is an Intel Cascade Lake 6230R with AVX-512. The compilers
 evaluated are, with flag -O3: icc version 19.1.3.304,  Clang 15 with 3 register allocation methods, greedy
 (base), basic and PBQP, and GCC version 11.9. icc version 2021
-(dpc++ OneAPI) is based on Clang 15 and does not exhibit differences with Clang 15 greedy. 
+(dpc++ OneAPI) is based on Clang 15 and does not exhibit any differences with Clang 15 greedy. 
 
 
 \begin{figure}
@@ -170,8 +159,8 @@ for (int i=0;i<BLOCKI;i+=ui) {
 \end{figure}
 
 
-\subsection{Performance evaluation with double on Intel CascadeLake}
-\begin{figure*}[ht]
+\subsection{Impact of unrolling factor on Intel CascadeLake}
+\begin{figure*}[h!]
 %  \begin{subfigure}[h]{0.45\textwidth}
 %  \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc-2021.2.0.pdf}
 %  \caption{icc 2021.2.0}
@@ -196,7 +185,7 @@ for (int i=0;i<BLOCKI;i+=ui) {
 \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/gcc-11.9.pdf}
   \caption{GCC 11.9}
   \end{subfigure}\hfill ~
-  \caption{Block DGEMM Performance used on Intel CascadeLake with different compilers. Performance is given in \% of peak flops/cycle (here 32). The block (BI,BK,BJ) is 64x256x64. Each code represent a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (fit in register whatever the schedule), others in red.  \label{fig:cascadelake}}
+  \caption{Block DGEMM Performance on Intel CascadeLake w.r.t. register and spill usage. Performance is given in \% of peak flops/cycle (here 32). The block (BI,BK,BJ) is 64x256x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (should fit in registers whatever the schedule), other codes are in grey (with spill) and red (without spill).  \label{fig:cascadelake}}
 \end{figure*}
  For all plots in Fig.\ref{fig:cascadelake}, the same codes with the same vectorization expressed with MIPP are
 compiled. All codes are tested 40 times, the best performance is shown. Only one memory allocation is used for all tests. Points shown in blue correspond to codes that should not require
@@ -212,97 +201,125 @@ blue codes. The max performance on this machine is normally 32 flops/cycles (wit
 
 There is no significant difference between icc version 2021 and Clang
 15, either greedy or PBQP register allocations. This is expected since
-icc now is based on LLVM. GCC however fails significanlty, reaching
+icc now is based on LLVM. GCC however fails significantly, reaching
 only 24 flop/cycle while other compilers reach 30-31 flop/cycle.  For
 the following experiments, only Clang 15 with greedy register
 allocation is considered.
 
 We observe that the best performance is reached with Clang 15 and
 icc-19.1.3 when the codes use exactly 32 registers. With gcc-11.9, the
-best code suing exactly 32 registers is among the best codes obtained
-with this compiler.  Tables shown in Figure \ref{fig:tables} show the
+best code using exactly 32 registers is among the best codes obtained
+with this compiler.  Tables in Figure \ref{fig:tables} show the
 performance of all codes using exactly 32 registers, no spill. The
 block size refers to the size taken by the input matrices manipulated
-in the inner loop, in number of vectors. Sizes larger than 32 imply that the compiler has introduced some additional loads during the computation and reuses SIMD registers. We observe that the best codes are different from one compiler to the other. 
+in the inner loop, in number of vectors. Sizes larger than 32 imply that the compiler has rescheduled loads during the computation and reuses SIMD registers. We observe that the best codes are different from one compiler to the other. 
 
-\begin{figure*}[ht]
+\begin{figure*}[h!]
 % For clang 15
 {    \scriptsize
-    \begin{tabular}{|c|c|c|}
+    \begin{tabular}{|c|c|c|c|}
       \hline
-      \multicolumn{3}{|c|}{Code performance with Clang} \\
+      \multicolumn{4}{|c|}{Code performance with Clang} \\
       \hline
-      Unrolling (ixkxj) & flop/cycle & block size \\
+      Unrolling & flop/cycle & block  & ILP\\
+      ixkxj& in peak \% & size & \\
       \hline
-      2x7x2 & 13.61  & 32\\
-2x4x4 & 17.85  & 32\\
-2x2x7 & 19.92  & 32\\
-4x4x2 & 19.58  & 32\\
-7x2x2 & 24.50  & 32\\
-3x3x6 & 25.62  & 45\\
-4x2x4 & 25.23  & 32\\
-10x1x2 & 27.19  & 32\\
-7x4x2 & 27.03  & 50\\
-8x4x2 & 27.90  & 56\\
-10x2x2 & 29.29  & 44\\
-6x4x3 & 30.10  & 54\\
-7x3x3 & 30.42  & 51\\
-8x2x3 & 30.44  & 46\\
+14x1x2 & 93.59 & 44 & 28 \\
+4x1x6 & 93.45 & 34 & 24 \\
+5x3x4 & 93.34 & 47 & 20 \\
+6x1x4 & 93.78 & 34 & 24 \\
+6x2x3 & 93.84 & 36 & 18 \\
+6x2x4 & 93.95 & 44 & 24 \\
+5x1x5 & 94.79 & 35 & 25 \\
+6x3x3 & 94.47 & 45 & 18 \\
+6x3x4 & 94.53 & 54 & 24 \\
+6x4x3 & 94.05 & 54 & 18 \\
+7x2x3 & 94.81 & 41 & 21 \\
+8x1x3 & 94.65 & 35 & 24 \\
+7x3x3 & 95.05 & 51 & 21 \\
+8x2x3 & 95.12 & 46 & 24 \\
 \hline
 \end{tabular}
 % For icc
     \begin{tabular}{|c|c|c|c|}
       \hline
-      \multicolumn{3}{|c|}{Code performance with icc 19.1.3} \\
+      \multicolumn{4}{|c|}{Code performance with icc 19.1.3} \\
       \hline
-      Unrolling (ixkxj) & flop/cycle  & block size \\
+      Unrolling & flop/cycle & block  & ILP\\
+      ixkxj& in peak \% & size & \\
       \hline
-3x2x6 & 25.34  & 36\\
-3x2x7 & 25.16  & 41\\
-3x2x8 & 25.47  & 46\\
-3x1x8 & 26.21  & 35\\
-4x3x4 & 26.10  & 40\\
-7x2x2 & 26.81 & 32 \\
-4x2x4 & 27.18  & 32\\
-5x2x4 & 27.97  & 38\\
-6x2x3 & 27.11  & 36\\
-4x1x6 & 28.78  & 34\\
-4x2x5 & 28.23  & 38\\
-10x1x2 & 29.02  & 32\\
-5x1x5 & 29.91  & 35\\
-6x1x4 & 30.47  & 34\\
+4x3x3 & 78.09 & 33 & 12 \\
+3x2x6 & 79.18 & 36 & 18 \\
+3x2x8 & 79.61 & 46 & 24 \\
+3x1x8 & 81.90 & 35 & 24 \\
+4x3x4 & 81.55 & 40 & 16 \\
+7x2x2 & 83.77 & 32 & 14 \\
+4x2x4 & 84.94 & 32 & 16 \\
+6x2x3 & 84.73 & 36 & 18 \\
+5x2x4 & 87.42 & 38 & 20 \\
+4x2x5 & 88.23 & 38 & 20 \\
+4x1x6 & 89.93 & 34 & 24 \\
+10x1x2 & 90.70 & 32 & 20 \\
+5x1x5 & 93.48 & 35 & 25 \\
+6x1x4 & 95.23 & 34 & 24 \\
 \hline
     \end{tabular}
-% For icc
+% For gcc
     \begin{tabular}{|c|c|c|c|}
       \hline
-      \multicolumn{3}{|c|}{Code performance with gcc 11.9} \\
+      \multicolumn{4}{|c|}{Code performance with gcc 11.9} \\
       \hline
-      Unrolling (ixkxj) & flop/cycle  & block size \\
+      Unrolling & flop/cycle & block  & ILP\\
+      ixkxj& in peak \% & size & \\
       \hline
-2x5x3 & 17.42  & 31\\
-2x5x4 & 17.31  & 38\\
-3x6x2 & 17.55  & 36\\
-2x2x6 & 18.41  & 28\\
-3x3x5 & 18.36  & 39\\
-3x5x3 & 18.93  & 39\\
-3x5x4 & 18.27  & 47\\
-2x4x4 & 19.30  & 32\\
-3x2x5 & 19.07  & 31\\
-3x4x3 & 19.96  & 33\\
-3x4x4 & 19.31  & 40\\
-3x5x2 & 19.49  & 31\\
-3x3x4 & 20.13  & 33\\
-5x3x2 & 22.94  & 31\\
+2x5x4 & 54.09 & 38 & 8 \\
+3x6x2 & 54.83 & 36 & 6 \\
+2x3x5 & 55.79 & 31 & 10 \\
+2x2x6 & 57.52 & 28 & 12 \\
+3x3x5 & 57.37 & 39 & 15 \\
+3x5x4 & 57.08 & 47 & 12 \\
+3x2x5 & 59.60 & 31 & 15 \\
+3x5x3 & 59.15 & 39 & 9 \\
+2x4x4 & 60.30 & 32 & 8 \\
+3x4x4 & 60.33 & 40 & 12 \\
+3x5x2 & 60.89 & 31 & 6 \\
+3x3x4 & 62.91 & 33 & 12 \\
+3x4x3 & 62.37 & 33 & 9 \\
+5x3x2 & 71.70 & 31 & 10 \\
 \hline
     \end{tabular}
 }
-\caption{Performance of the best 14 codes with Clang15,  icc 19.1.3 and gcc 11.9. Only codes using 32 registers and 0 spill are considered here\label{fig:tables}}
+\caption{Performance of the best 14 codes with Clang15,  icc 19.1.3 and gcc 11.9. Only codes using 32 registers and 0 spill are considered here\label{fig:tables}. block size corresponds to $ui*uj+ui*uk+uk*uj$. $40$ means that the code requires $40$ zmm registers if all loads are scheduled before the computation. ILP corresponds here to $ui*uj$.}
 \end{figure*}
 
-Figure \ref{fig:cascadelakecorrelation}  shows the correlation between the codes compiled by the three compilers. One dot corresponds to the same source code, with the same unrolling factors. This confirms that the correlation is rather weak. 
+\subsection{Impact of expected ILP on Intel CascadeLake}
+Figure \ref{fig:cascadelakeilp} shows the performance according to the parallelism expected from unrolling, here $ui * uj$. Indeed, $uk$ does not create additionnal ILP. From this plot, we observe that for icc and clang, the best codes result from a high ILP. On the contrary, for gcc the code without spill with the highest expected ILP only reaches $42\%$ of the max performance. The maximum performance  
 
-\begin{figure*}[ht]
+\begin{figure*}[h!]
+%  \begin{subfigure}[h]{0.45\textwidth}
+%  \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc-2021.2.0.pdf}
+%  \caption{icc 2021.2.0}
+%  \end{subfigure}
+  \begin{subfigure}[h]{0.45\textwidth}  
+\includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc-19.1.3p.pdf}
+  \caption{icc 19.1.3}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.45\textwidth}  
+\includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/greedyp.pdf}
+  \caption{Clang 15}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.45\textwidth}  
+\includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/gcc-11.9p.pdf}
+  \caption{GCC 11.9}
+  \end{subfigure}\hfill ~
+  \caption{Block DGEMM Performance used on Intel CascadeLake according to expected ILP. Performance is given in \% of peak flops/cycle (here 32). The expected ILP is the product of the unrolled factors $ui * uj$. The block (BI,BK,BJ) is 64x256x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (should fit in registers whatever the schedule), other codes are in grey (with spill) and red (without spill).\label{fig:cascadelakeilp}}
+\end{figure*}
+
+
+
+Figure \ref{fig:cascadelakecorrelation}  shows the correlation between the codes compiled by the three compilers. One dot corresponds to the same source code, with the same unrolling factors. This confirms that the correlation is rather weak, with the exception of the codes where the register block size corresponds to 32.  
+
+\begin{figure*}[h!]
   \begin{subfigure}[h]{0.45\textwidth}
   \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc21xicc19.pdf}
   \caption{Clang 15 compared to icc 19.1.3}
@@ -311,7 +328,8 @@ Figure \ref{fig:cascadelakecorrelation}  shows the correlation between the codes
 \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/gccxgreedy.pdf}
   \caption{Clang 15 compared to gcc 11.9}
   \end{subfigure}
-  \caption{Correlation of code performance on CascadeLake between different compilers.\label{fig:cascadelakecorrelation}}
+
+  \caption{(a) and (b) Correlation of code performance on CascadeLake between different compilers.\label{fig:cascadelakecorrelation}. In (a), the red dots correspond to codes that have a register block size of exactly 32. It implies that whatever the scheduling, it fits into registers.}
 \end{figure*}
 
 Finally, Figure \ref{fig:cascadelakeloc} shows for a given number of
@@ -319,16 +337,16 @@ source code lines, the performance obtained. Surprisingly, performance
 culminates with 90 loc and then it degrades when the number of source
 code lines. Note that the unrolling factor on k, creating a long
 sequence of FMAs, is assumed to be on one single line of code.
-\begin{figure*}[ht]
+\begin{figure*}[h!]
   \includegraphics[width=0.45\textwidth]{../benches/gemm/cascadelake-64x256x64/icc21loc.pdf}
   \caption{Performance wrt lines of source code\label{fig:cascadelakeloc}}
 \end{figure*}
 
 
-\subsection{Performance evaluation with double on ArmThunderX2}
-The codes considered are exactly the same as before (portability).  Due to the architecture of the processor, supporting a SMT of 4, we compared performance for a single thread and performance with 4 threads, both on a single core. 
+\subsection{Impact of unrolling factor and SMT on Cavium Arm ThunderX2 and Intel CascadeLake}
+The codes considered are exactly the same as before (portability).  Due to the architecture of the processor, supporting a SMT of 4 for the Cavium, and SMT 2 for the Intel, we compared performance for a single thread and performance with 4 and 2  threads resp., both on a single core. 
 
-\begin{figure*}[ht]
+\begin{figure*}[h!]
   \begin{subfigure}[h]{0.45\textwidth}
   \includegraphics[width=\textwidth]{../benches/gemm/arm-64x256x64/greedy.pdf}
   \caption{clang 15}
@@ -337,12 +355,45 @@ The codes considered are exactly the same as before (portability).  Due to the a
 \includegraphics[width=\textwidth]{../benches/gemm/arm-64x256x64/openmp.pdf}
   \caption{clang 15 with OpenMP, SMT of 4}
   \end{subfigure}
+    \caption{Block DGEMM Performance used on Cavium Arm ThunderX2 with (b) and without SMT (a). Performance is given in \% of peak flops/cycle (here 8). The block (BI,BK,BJ) is 64x128x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (fit in register whatever the schedule), others in red. \label{fig:arm}}
+\end{figure*}
+
+The correlation between performance with and without SMT, both for Cavium Arm ThunderX2 (clang 15) and Intel CascadeLake (icc 19.1.3) are shown in Fig.\ref{fig:SMT}. For Arm, this is for 4 threads, for Intel this is for 2 threads. On Arm, SMT brings a $8\%$ improvement on the best code, and on Intel, the same percentage applies. However, the performance have been degraded when compiling with openmp flag (and running with 1 thread) compared to the non-openmp version.
+\begin{figure*}[h!]
   \begin{subfigure}[h]{0.45\textwidth}  
 \includegraphics[width=\textwidth]{../benches/gemm/arm-64x256x64/clangxsmt.pdf}
   \caption{Correlation between Clang 15 without and with SMT4}
   \end{subfigure}
-  \caption{Block DGEMM Performance used on Arm ThunderX2 with different compilers. Performance is given in \% of peak flops/cycle (here 8). The block (BI,BK,BJ) is 64x256x64. Each code represent a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (fit in register whatever the schedule), others in red. (c) show correlation between the two plots. \label{fig:cascadelake}}
+    \begin{subfigure}[h]{0.45\textwidth}  
+\includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc1thx2th.pdf}
+  \caption{Correlation between icc without and with SMT2}
+    \end{subfigure}
+    \caption{Correlation between performance without SMT and with SMT, on Cavium Arm ThunderX2 (SMT4) and on Intel CascadeLake (SMT2). Performance is given in \% of peak flops/cycle. \label{fig:SMT}}
 \end{figure*}
+
+
+\subsection{Comparing performance on AVX2, different microarchitectures}
+The codes considered are exactly the same as before (portability). We evaluated the same code on AMD Zen 2, Zen 3 architectures and on Intel Haswell, all being AVX2 compatible architectures. Of course, the microarchitecture is different, and the compiler may choose to generate different codes. Only Clang 15 with greedy register allocation has been considered here. 
+
+The experiments show that the best performing codes have the same unrolling factors and the assembly code generated are the same. 
+\begin{figure*}[h!]
+  \begin{subfigure}[h]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../benches/gemm/haswell-64x256x64/greedy.pdf}
+  \caption{Clang 15 on Intel Haswell}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.45\textwidth}  
+\includegraphics[width=\textwidth]{../benches/gemm/zen3-64x256x64/greedy.pdf}
+  \caption{Clang 15 on AMD Zen3$^*$}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.45\textwidth}  
+\includegraphics[width=\textwidth]{../benches/gemm/zen3-64x256x64/greedy-zen2.pdf}
+  \caption{Clang 15 on AMD Zen2$^*$}
+  \end{subfigure}
+  \caption{Block DGEMM Performance used on AVX2 architectures. Performance is given in \% of peak flops/cycle (here 8). The block (BI,BK,BJ) is 64x128x64. Each code represent a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (fit in register whatever the schedule), others in red. (c) show correlation between the two plots. $^*$ Performance scaled down to take into account turboboost effect, active on these machines\label{fig:avx2}}
+\end{figure*}
+
+
+
 
 \section{Related Works}
 \section{Conclusion}

@@ -8,13 +8,13 @@ set ylabel "% Peak Flops [DP]/cycle"
 set xlabel "registers and spill used"
 set style fill transparent solid 0.3
 set style circle radius 0.5
-set palette defined ( 0 "#0000FF", 1 "#FF0000" )
+set palette defined ( 0 "blue", 1 "red", 2 "grey" )
 stats "openmp.dat" using 10:6 nooutput
 set parametric
 set format y "%.0f%%" 
 set ytics 0,10,100 
 set parametric
 set trange [0: 100]
-plot 32,t lc rgb "red", "openmp.dat" using ($10+$8):($6/8/8*100):($3*$4+$3*$5+$4*$5>32?1:0) with circles palette 
+plot 32,t lc rgb "red", "openmp.dat" using ($10+$8):($6/8/8*100):($3*$4+$3*$5+$4*$5<=32?0:($8==0?1:2)) with circles palette 
 quit
 

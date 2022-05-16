@@ -6,7 +6,11 @@ unset key
 set ylabel "Flops [DP]/cycle with Clang 15/SMT4"
 set xlabel "Flops [DP]/cycle with Clang 15"
 set style fill transparent solid 0.3
+set ytics 0,10,100 
+set xtics 0,10,100 
+set format y "%.0f%%" 
+set format x "%.0f%%" 
 set style circle radius 0.5
-plot "clangxsmt.dat" using 6:16 with circles  
+plot "clangxsmt.dat" using ($6/64*100):($16/64*100) with circles  
 quit
 
