@@ -31,18 +31,35 @@ void init_bench()
 	#pragma clang loop vectorize(disable)
 	for (int i=0;i<BLOCK;i++)
 		#pragma clang loop vectorize(disable)                                            
-		for (int j=0;j<BLOCK;j++) vA[i*BLOCK+j]=2*i+j;
+		for (int j=0;j<BLOCK;j++) vA[i*BLOCK+j]=i+j;
 	#pragma clang loop vectorize(disable)
 	for (int i=0;i<BLOCK;i++)
 		vX[i]=i;
 	#pragma clang loop vectorize(disable)
 	for (int i=0;i<BLOCK;i++)   
-		vY[i]=i*i;
+		vY[i]=i/2;
 	#pragma clang loop vectorize(disable)
 	for (int i=0;i<BLOCK;i++)   
 		vZ[i]=0;
 }
-
+/*
+using namespace std;
+void printV(TYPE v[], int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		cout<<v[i]<<"\t";
+	}
+	cout<<endl;
+}
+void printM(TYPE M[], int i, int k)
+{
+	for(int ii=0;ii<i;ii++)
+	{
+		printV(M+ii*k, k);
+	}
+}
+*/
 float bench()
 {
 	const int nv=mipp::N<TYPE>();                  
@@ -86,7 +103,7 @@ float bench()
 			{% endfor %}
 
 			{% for kk in range(opt.uk) -%}
-			mipp::Reg<TYPE> y{{ kk }};
+			//mipp::Reg<TYPE> y{{ kk }};
 			{% endfor %}
 
 			{% for kk in range(opt.uk) -%}
@@ -94,10 +111,6 @@ float bench()
 			a{{ ii }}_{{ kk }}.load(&A[(i+{{ ii }})*BLOCK + k+{{ kk }}*nv]);
 			{% endfor %}
 			{%- endfor -%}
-
-			{% for kk in range(opt.uk) -%}
-			y{{ kk }}.load(&Y[k+{{ kk }}*nv]);
-			{% endfor %}
 
 
 			{% for kk in range(opt.uk) -%}
@@ -112,10 +125,14 @@ float bench()
 
 			{%- endfor -%}
 
+			{% for kk in range(opt.uk) -%}
+			z{{ kk }}.load(&Y[k+{{ kk }}*nv]);//y{{ kk }}.load(&Y[k+{{ kk }}*nv]);
+			{% endfor %}
+
 
 			{% for kk in range(opt.uk) -%}
 			{% for ii in range(opt.ui) -%}
-			r{{ ii }}=mipp::fmadd(a{{ ii }}_{{ kk }}, y{{ kk }}, r{{ ii }});
+			r{{ ii }}=mipp::fmadd(a{{ ii }}_{{ kk }}, z{{ kk }} /*y{{ kk }}*/, r{{ ii }});
 			{% endfor %}
 			{%- endfor -%}
 
@@ -127,6 +144,20 @@ float bench()
 
 	}    
 	time=__rdtsc()-time;
+
+	/*
+	cout<<"============================"<<endl<<endl;
+	printM(vA, BLOCK, BLOCK);
+	cout<<endl;
+	printV(vX, BLOCK);
+	cout<<endl;
+	printV(vY, BLOCK);
+	cout<<endl;
+	printM(vA, BLOCK, BLOCK);
+	cout<<endl;
+	cout<<endl;
+	printV(vZ, BLOCK);
+	*/
 
 	return ((float)(2*BLOCK*(BLOCK+BLOCK-1))+BLOCK)/((float)time);
 }
@@ -146,5 +177,5 @@ int n_reg_max()
 {
 	int i={{ opt.ui }};
 	int k={{ opt.uk }};
-	return 2*i+i*k+2*k;
+	return 2*i+i*k+k;
 }

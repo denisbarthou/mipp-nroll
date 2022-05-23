@@ -3,7 +3,7 @@ set output "../pdf/matvec_ui_1_2_uk_1_32.pdf"
 set nokey
 unset colorbox
 set title "matvec Performance used on AMD RYZEN 5 with clang++ / greedy \nThe unroll is ui 1 2 uk 1 32 \n(clang version 10.0.0-4ubuntu1 )"
-set ylabel "Flops [DP]/cycle"
+set ylabel "Flops [SP]/cycle"
 set xlabel "registers and spill used"
 set style fill transparent solid 0.3
 set style circle radius 0.3

@@ -14,7 +14,7 @@ RUN_OMP_NUM_THREADS="2"
 BOUND_CORE="3"
 
 pdf_proc="AMD RYZEN 5"
-pdf_hight="8"
+pdf_hight="12"
 
 
 
@@ -559,7 +559,7 @@ write_plot "set output \"../pdf/$pdf_name\""
 write_plot "set nokey"
 write_plot "unset colorbox"
 write_plot "set title \"$pdf_bench Performance used on $pdf_proc with $pdf_compil / $pdf_alloc \nThe unroll is $FULL_PARAMS $pdf_title_threading\n$pdf_compil_version\""
-write_plot "set ylabel \"Flops [DP]/cycle\""
+write_plot "set ylabel \"Flops [SP]/cycle\""
 write_plot "set xlabel \"registers and spill used\""
 write_plot "set style fill transparent solid 0.3"
 write_plot "set style circle radius 0.3"
