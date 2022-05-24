@@ -13,7 +13,7 @@
 \usepackage{wrapfig}
 \usepackage{subcaption}
 \usepackage{color}
-
+\usepackage{float}
 \definecolor{light-gray}{gray}{0.80}
 %===========================================================
 %                               Title
@@ -55,7 +55,7 @@
   escapeinside={(*}{*)}
 }
 
-\title{Exploring Vectorization and unrolling with SMT}
+\title{Exploring vectorization and unrolling with SMT}
 
 %\affiliation{\institution{Bordeaux Institute of Technology} \city{Bordeaux} \country{France}}
 %\affiliation{\institution{Bordeaux Institute of Technology} \city{Bordeaux} \country{France}}
@@ -159,7 +159,19 @@ for (int i=0;i<BLOCKI;i+=ui) {
 \end{figure}
 
 
-\subsection{Impact of unrolling factor on Intel CascadeLake}
+\subsection{Impact of unrolling factors}
+For all plots in Fig.\ref{fig:cascadelake}, the same codes with the same vectorization expressed with MIPP are
+compiled. All codes are tested 40 times, the best performance is shown. Only one memory allocation is used for all tests. Points shown in blue correspond to codes that should not require
+more SIMD registers than the physical registers (32 for AVX-512, 16 for AVX2, shown by the vertical red line), whatever
+the scheduling chosen by the compiler. This is not the case for codes
+shown in red, some schedules may manage to use only registers while
+others will require spill code. The graphs show performance w.r.t. the
+cumulated register count and spill used by the code. For instance, a value of 40 registers and
+spill used indicates that the compiler was able to use all 32
+registers and 8 additional spaces on the stack for spill. With the exception of
+GCC and icc 19.1.3, other compilers manage to allocate less than the number of registers for all
+blue codes.
+
 \begin{figure*}[h!]
 %  \begin{subfigure}[h]{0.45\textwidth}
 %  \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc-2021.2.0.pdf}
@@ -185,46 +197,68 @@ for (int i=0;i<BLOCKI;i+=ui) {
 \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/gcc-11.9.pdf}
   \caption{Intel CascadeLake, AVX-512, GCC 11.9}
   \end{subfigure}
-    \begin{subfigure}[h!]{0.45\textwidth}
+  \caption{Block DGEMM Performance on AVX-512 architecture w.r.t. register and spill usage. Performance is given in \% of peak flops/cycle. The block (BI,BK,BJ) is 64x256x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size lower than $32$ are in blue (should fit in registers whatever the schedule), other codes are in grey (with spill) and red (without spill).  \label{fig:cascadelake}}
+\end{figure*}
+\begin{figure*}[h!]
+  \begin{subfigure}[h!]{0.45\textwidth}
   \includegraphics[width=\textwidth]{../benches/gemm/haswell-64x256x64/greedy.pdf}
-  \caption{Intel Haswell, AVX-2, Clang 15}
-  \end{subfigure}\\
+  \caption{Intel Haswell, AVX2, Clang 15}
+  \end{subfigure}
   \begin{subfigure}[h!]{0.45\textwidth}  
 \includegraphics[width=\textwidth]{../benches/gemm/zen3-64x256x64/greedy.pdf}
-  \caption{AMD Zen 3, AVX-2, Clang 15$^*$}
-  \end{subfigure}
+  \caption{AMD Zen 3, AVX2, Clang 15$^*$}
+  \end{subfigure}\\
   \begin{subfigure}[h!]{0.45\textwidth}  
 \includegraphics[width=\textwidth]{../benches/gemm/zen3-64x256x64/greedy-zen2.pdf}
-  \caption{AMD Zen 2, AVX-2, Clang 15$^*$}
+  \caption{AMD Zen 2, AVX2, Clang 15$^*$}
   \end{subfigure}
-  \caption{Block DGEMM Performance on AVX-512 and AVX-2 architectures w.r.t. register and spill usage. Performance is given in \% of peak flops/cycle. The block (BI,BK,BJ) is 64x256x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ on AVX-512, $\leq 16$ for AVX-2,  are in blue (should fit in registers whatever the schedule), other codes are in grey (with spill) and red (without spill).  \label{fig:cascadelake}}
+  \caption{Block DGEMM Performance on AVX2 architectures w.r.t. register and spill usage. Performance is given in \% of peak flops/cycle. The block (BI,BK,BJ) is 64x256x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size lower than $16$ are in blue (should fit in registers whatever the schedule), other codes are in grey (with spill) and red (without spill).  \label{fig:avx2}}
 \end{figure*}
- For all plots in Fig.\ref{fig:cascadelake}, the same codes with the same vectorization expressed with MIPP are
-compiled. All codes are tested 40 times, the best performance is shown. Only one memory allocation is used for all tests. Points shown in blue correspond to codes that should not require
-more SIMD registers than the physical registers (32 here, shown by the vertical red line), whatever
-the scheduling chosen by the compiler. This is not the case for codes
-shown in red, some schedules may manage to use only registers while
-others will require spill code. The graphs show performance w.r.t. the
-cumulated register count and spill used by the code. For instance, a value of 40 registers and
-spill used indicates that the compiler was able to use all 32
-registers and 8 additional spaces on the stack for spill. With the exception of
-GCC, other compilers manage to allocate less than 32 registers for all
-blue codes. The max performance on this machine is normally 32 flops/cycles (with 2 FMAs operating on AVX512 vectors).  
+ 
 
-There is no significant difference between icc version 2021 and Clang
+For AVX-512, different compilers are evaluated, and different register allocations for Clang. There is no significant difference between icc version 2021 and Clang
 15, either greedy or PBQP register allocations. This is expected since
 icc now is based on LLVM. GCC however fails significantly, reaching
 only 24 flop/cycle while other compilers reach 30-31 flop/cycle.  For
 the following experiments, only Clang 15 with greedy register
 allocation is considered.
 
-We observe that the best performance is reached with Clang 15 and
-icc-19.1.3 when the codes use exactly 32 registers. With gcc-11.9, the
-best code using exactly 32 registers is among the best codes obtained
-with this compiler.  Tables in Figure \ref{fig:tables} show the
-performance of all codes using exactly 32 registers, no spill. The
+The best performing code is on AVX-512 and AVX2, with all compilers
+with the exception of GCC, a code using exactly the maximum number of
+registers, and correspond to a red dot: the block size exceeds the
+size of vectors but there is no spill. This means the compiler creates
+some artificial dependences by reusing SIMD registers among the
+unrolled instructions. For GCC, the best performing code using 32
+registers on AVX-512 is among the best performing codes, and it
+corresponds to a blue dot. On all cases, \textbf{we observe that the range of
+codes using all SIMD registers, no spill, covers a wide range of
+performance, even if we focus on codes with red dots. Hence in order to
+select the best performing codes, with running it, we need another
+metric.}
+
+
+\subsection{Correlation between compiler versions on Intel CascadeLake}
+
+Figure \ref{fig:cascadelakecorrelation}  shows the correlation between the codes compiled by the three compilers on Intel CascadeLake AVX-512. One dot corresponds to the same source code, with the same unrolling factors. \textbf{The correlation between performance of a code accross different compilers is rather weak}, since the plot does not correspond to a diagonal. 
+
+\begin{figure*}[h!]
+  \begin{subfigure}[h]{0.45\textwidth}
+  \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc21xicc19.pdf}
+  \caption{Clang 15 compared to icc 19.1.3}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.45\textwidth}  
+\includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/gccxgreedy.pdf}
+  \caption{Clang 15 compared to gcc 11.9}
+  \end{subfigure}
+
+  \caption{(a) and (b) Correlation of code performance on CascadeLake between different compilers.\label{fig:cascadelakecorrelation}. In (a), the red dots correspond to codes that have a register block size of exactly 32. It implies that whatever the scheduling, it fits into registers.}
+\end{figure*}
+Tables in Figure \ref{fig:tables} provide additional insight by showing the
+performance of the $14$  best performing  codes using exactly 32 registers, no spill, for each compiler. The
 block size refers to the size taken by the input matrices manipulated
-in the inner loop, in number of vectors. Sizes larger than 32 imply that the compiler has rescheduled loads during the computation and reuses SIMD registers. We observe that the best codes are different from one compiler to the other. 
+in the inner loop, in number of vectors. Sizes larger than 32 imply that the compiler has rescheduled loads during the computation and reuses SIMD registers. We observe that the best codes are different from one compiler to the other, there is no code outperforming the others.
+
+In addition to the block sizes, the tables show also the expected parallelism degree (here obtained as the unrolling factors $ui*uj$). This metric is further explored in the following section.
 
 \begin{figure*}[h!]
 % For clang 15
@@ -305,8 +339,10 @@ in the inner loop, in number of vectors. Sizes larger than 32 imply that the com
 \end{figure*}
 
 \subsection{Impact of expected ILP}
-Figure \ref{fig:cascadelakeilp} shows the performance according to the parallelism expected from unrolling, here $ui * uj$. Indeed, $uk$ does not create additionnal ILP. From this plot, we observe that for icc and clang, the best codes result from a high ILP. On the contrary, for gcc the code without spill with the highest expected ILP only reaches $42\%$ of the max performance. The maximum performance  
-
+The expected ILP, resulting from unrolling all three loops in a matrix multiply operation, is $ui * uj$. Indeed, the $uk$ unrolling factor only builds a longer sequence of FMA operations and is not expected to create additional ILP.
+Figure \ref{fig:cascadelakeilp} shows the performance according to the parallelism expected from unrolling, on AVX-512 and AVX2 architectures. From this plot, we observe that for icc and Clang on AVX-512, the best codes result from a high ILP. On the contrary, for gcc on AVX-512, the code without spill with the highest expected ILP only reaches $42\%$ of the max performance (rightmost red dots). For AVX2 architectures, the rightmost red dots (no spill) do not correspond to the best performing code.
+\textbf{The expected ILP does not seem to be a sufficient criteria to select the best performing code.}
+\textbf{The reason  may be explained by the difference between the expected ILP, in theory, and the ILP actually obtained in the assembly code generated by the compiler.}
 \begin{figure*}[h!]
 %  \begin{subfigure}[h]{0.45\textwidth}
 %  \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc-2021.2.0.pdf}
@@ -336,25 +372,7 @@ Figure \ref{fig:cascadelakeilp} shows the performance according to the paralleli
 \includegraphics[width=\textwidth]{../benches/gemm/haswell-64x256x64/greedyp.pdf}
   \caption{Intel Haswell, AVX2, Clang 15}
   \end{subfigure}
-  \caption{Block DGEMM Performance used on Intel CascadeLake according to expected ILP. Performance is given in \% of peak flops/cycle (here 32). The expected ILP is the product of the unrolled factors $ui * uj$. The block (BI,BK,BJ) is 64x256x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (should fit in registers whatever the schedule), other codes are in grey (with spill) and red (without spill).\label{fig:cascadelakeilp}}
-\end{figure*}
-
-
-\subsection{Correlation between compiler versions on Intel CascadeLake}
-
-Figure \ref{fig:cascadelakecorrelation}  shows the correlation between the codes compiled by the three compilers. One dot corresponds to the same source code, with the same unrolling factors. This confirms that the correlation is rather weak, with the exception of the codes where the register block size corresponds to 32.  
-
-\begin{figure*}[h!]
-  \begin{subfigure}[h]{0.45\textwidth}
-  \includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/icc21xicc19.pdf}
-  \caption{Clang 15 compared to icc 19.1.3}
-  \end{subfigure}
-  \begin{subfigure}[h]{0.45\textwidth}  
-\includegraphics[width=\textwidth]{../benches/gemm/cascadelake-64x256x64/gccxgreedy.pdf}
-  \caption{Clang 15 compared to gcc 11.9}
-  \end{subfigure}
-
-  \caption{(a) and (b) Correlation of code performance on CascadeLake between different compilers.\label{fig:cascadelakecorrelation}. In (a), the red dots correspond to codes that have a register block size of exactly 32. It implies that whatever the scheduling, it fits into registers.}
+  \caption{Block DGEMM Performance used on AVX-512 and AVX2 according to expected ILP. Performance is given in \% of peak flops/cycle. The expected ILP is the product of the unrolled factors $ui * uj$. The block (BI,BK,BJ) is 64x256x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size lower than the number of registers are in blue (should fit in registers whatever the schedule), other codes are in grey (with spill) and red (without spill).\label{fig:cascadelakeilp}}
 \end{figure*}
 
 Finally, Figure \ref{fig:cascadelakeloc} shows for a given number of
@@ -368,22 +386,24 @@ sequence of FMAs, is assumed to be on one single line of code.
 \end{figure*}
 
 
-\subsection{Impact of unrolling factor and SMT on Cavium Arm ThunderX2 and Intel CascadeLake}
-The codes considered are exactly the same as before (portability).  Due to the architecture of the processor, supporting a SMT of 4 for the Cavium, and SMT 2 for the Intel, we compared performance for a single thread and performance with 4 and 2  threads resp., both on a single core. 
+\subsection{Impact of SMT on Cavium Arm ThunderX2 and Intel CascadeLake}
+Simultaneous Multi-Threading (or hyperthreading) corresponds to the case where two threads (or more) are executed at the same time on the same core. The instructions are then intertwined, the functional units are put in common. SMT could be considered as a dynamic unrolling, especially interesting when facing codes calling library functions. The instructions of the functions are then intertwined, independently of the function scope.   
+
+The codes considered are exactly the same as before (portability).  Due to the architecture of the processor, supporting an SMT of 4 for the Cavium, and SMT 2 for the Intel,  performance is compared for a single thread and performance with 4 and 2  threads resp., both on a single core. 
 
 \begin{figure*}[h!]
   \begin{subfigure}[h]{0.45\textwidth}
   \includegraphics[width=\textwidth]{../benches/gemm/arm-64x256x64/greedy.pdf}
-  \caption{clang 15}
+  \caption{Cavium Arm Thunder X2, NEON, Clang 15, no SMT}
   \end{subfigure}
   \begin{subfigure}[h]{0.45\textwidth}  
 \includegraphics[width=\textwidth]{../benches/gemm/arm-64x256x64/openmp.pdf}
-  \caption{clang 15 with OpenMP, SMT of 4}
+  \caption{Cavium Arm ThunderX2, NEON, Clang 15, SMT of 4}
   \end{subfigure}
     \caption{Block DGEMM Performance used on Cavium Arm ThunderX2 with (b) and without SMT (a). Performance is given in \% of peak flops/cycle (here 8). The block (BI,BK,BJ) is 64x128x64. Each code represents a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (fit in register whatever the schedule), others in red. \label{fig:arm}}
 \end{figure*}
-
-The correlation between performance with and without SMT, both for Cavium Arm ThunderX2 (clang 15) and Intel CascadeLake (icc 19.1.3) are shown in Fig.\ref{fig:SMT}. For Arm, this is for 4 threads, for Intel this is for 2 threads. On Arm, SMT brings a $8\%$ improvement on the best code, and on Intel, the same percentage applies. However, the performance have been degraded when compiling with openmp flag (and running with 1 thread) compared to the non-openmp version.
+Performance 
+The correlation between performance with and without SMT, both for Cavium Arm ThunderX2 (clang 15) and Intel CascadeLake (icc 19.1.3) are shown in Fig.\ref{fig:SMT}. For Arm, this is for 4 threads, for Intel this is for 2 threads. On Arm, SMT brings a $8\%$ improvement on the best code, and on Intel, the same percentage applies. However, the performance have been degraded when compiling with OpenMP flag (and running with 1 thread) compared to the non-OpenMP version.
 \begin{figure*}[h!]
   \begin{subfigure}[h]{0.45\textwidth}  
 \includegraphics[width=\textwidth]{../benches/gemm/arm-64x256x64/clangxsmt.pdf}
@@ -396,24 +416,7 @@ The correlation between performance with and without SMT, both for Cavium Arm Th
     \caption{Correlation between performance without SMT and with SMT, on Cavium Arm ThunderX2 (SMT4) and on Intel CascadeLake (SMT2). Performance is given in \% of peak flops/cycle. \label{fig:SMT}}
 \end{figure*}
 
-
-\subsection{Comparing performance on AVX2, different microarchitectures}
-The codes considered are exactly the same as before (portability). We evaluated the same code on AMD Zen 2, Zen 3 architectures and on Intel Haswell, all being AVX2 compatible architectures. Of course, the microarchitecture is different, and the compiler may choose to generate different codes. Only Clang 15 with greedy register allocation has been considered here. 
-
-The experiments show that the best performing codes have the same unrolling factors and the assembly code generated are the same. 
-%\begin{figure*}[h!]
-%  \caption{Block DGEMM Performance used on AVX2 architectures. Performance is given in \% of peak flops/cycle (here 8). The block (BI,BK,BJ) is 64x128x64. Each code represent a different register block size, obtained through the three unrolling factors. Codes with register block size $\leq 32$ are in blue (fit in register whatever the schedule), others in red. (c) show correlation between the two plots. $^*$ Performance scaled down to take into account turboboost effect, active on these machines\label{fig:avx2}}
-%\end{figure*}
-
-
-
-\begin{figure*}[h!]
-
-  \includegraphics[width=\textwidth]{../autobench/datas/axya/axya_ui_1_32_uk_1_32.pdf}
-  \caption{Peformance of the sum of product $A\times x+y\times A$, with $A$ a $1024\times1024$ matrix and $x,y$ two vectors of length $1024$. Type of data is float.}
-\end{figure*}
-
-
+\textbf{For blocked  Gemm, it shows that SMT brings $8\%$ of performance, and the codes with good performance for SMT have good performance on 1 thread.} 
 \section{Related Works}
 \section{Conclusion}
 \label{sec:conclusion}
