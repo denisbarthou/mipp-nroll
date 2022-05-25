@@ -13,3 +13,5 @@ set trange [0: 100]
 set palette defined ( 0 "#0000FF", 1 "#FF0000" )
 plot '< echo "16 80"' w impulse lc rgb "red", "dat.txt" using ($7+$9):($5*100/16):($11>16?1:0) with circles palette
 quit
+
+

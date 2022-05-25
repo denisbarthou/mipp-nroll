@@ -112,7 +112,7 @@ bool enable()
 {
 	int i={{ opt.ui }};
 	int k={{ opt.uk }};
-	if(i*k>32 || mippN*i>BLOCKI || k>BLOCKK)
+	if(i*k>1024 || mippN*i>BLOCKI || k>BLOCKK)
 	{
 		return false;
 	}

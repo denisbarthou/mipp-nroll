@@ -138,11 +138,11 @@ for (int i=0;i<BLOCKI;i+=ui) {
     }                
     for (int k=0;k<BLOCKK;k+= uk ) {            
       { ii in [0,ui],kk in [0,uk]:
-          mipp::Reg<TYPE> a{{ ii }}{{ kk }};
+          mipp::Reg<TYPE> a{ i }{ k };
           a_{ii,kk} = mipp::set1<TYPE>(A[(i + ii )*BLOCKK+k+ kk ]);
       }
       { jj in [0,uj],kk in [0,uk]:
-          mipp::Reg<TYPE> b{{ kk }}{{ jj }};
+          mipp::Reg<TYPE> b{ k }{{ jj }};
           b_{kk,jj}.load(&B[(k+ kk )*BLOCKJ + j + jj*nv]);
       }    
       { ii in [0,ui], jj in [0,uj] :
@@ -417,6 +417,151 @@ The correlation between performance with and without SMT, both for Cavium Arm Th
 \end{figure*}
 
 \textbf{For blocked  Gemm, it shows that SMT brings $8\%$ of performance, and the codes with good performance for SMT have good performance on 1 thread.} 
+
+%=========== Ajouté par Edgar (donc j'ai peut être fait des erreurs ou fautes de frappes) ================
+
+\subsection{Matrix-vector operations performances on AMD RYZEN 5}
+
+The AMD RYZEN 5 processor has 16 vector registers and 256 bits in a vector, so it can store 4 floats.\\
+
+In the following demonstrations, $i$ and $j$ are the unrolling degree on one dimensions of the matrix. 
+
+\begin{figure*}[h!]
+  \includegraphics[width=\textwidth]{../autobench/datas/axya/axya_ui_1_32_uk_1_32.pdf}
+  \caption{Performance of the sum of product $A\times x+y\times A$, with $A$ a $1024\times1024$ matrix and $x,y$ two vectors of length $1024$. Type of data is float.}
+\end{figure*}
+
+
+Now the Figure \ref{fig:matvec_comp} shows the performances differences of a matrix vector product with different versions of the product algorithm. The two algorithms are described on Figure \ref{fig:matvec_algo}.
+
+\begin{figure}
+\begin{tabular}{ccc}
+\begin{lstlisting}[linewidth=0.45\textwidth]
+for (int k=0;k<BLOCKK;k+=uk) {
+  { kk in [0,uk]:
+    mipp::Reg<TYPE> b0_{ kk };
+  }
+  { kk in [0,uk]:
+    b0_{ kk }=mipp::set1<TYPE>(B[k+ {{ kk } ]);
+  }
+  for (int i=0;i<BLOCKI;i+=ui*nv) {         
+    { ii in [0,ui]
+      mipp::Reg<TYPE> c{ ii };
+    }
+    { kk in [0,uk]:
+      { ii in [0,ui]:
+        mipp::Reg<TYPE> a{ ii }_{ kk };
+      }
+    }
+    { ii in [0,ui]:
+      c{ ii }.load(&C[i+{ ii }*nv]);
+    }
+    { kk in [0,uk]:
+      { ii in [0,ui]:
+        a{ ii }_{ kk }.load(&A[BLOCKI*(k+ { kk } ) + i+{ ii }*nv]);
+      }
+    }
+    { kk in [0,uk]:
+      { ii in [0,ui]:
+        c{ ii } = mipp::fmadd(a{ ii }_{ kk }, b0_{ kk },c{ ii });
+      }
+    }
+    { ii in [0,ui]:
+      c{ ii }.store(&C[i+{ ii }*nv]);
+    }
+  }
+}
+
+\end{lstlisting}
+&
+\hspace{0.12\textwidth}
+&
+\begin{lstlisting}[linewidth=0.45\textwidth]
+for (int i=0;i<BLOCKI;i+=ui*nv) {
+    { ii in [0,ui]
+      mipp::Reg<TYPE> c{ i }_0;
+    }
+    { ii in [0,ui]
+      c{ i }_0.load(&C[i+ { i }*nv ]);
+    }
+    for (int k=0;k<BLOCKK;k+=uk) {         
+      { ii in [0,ui]
+        { kk in [0,uk]:
+          mipp::Reg<TYPE> a{ i }_{ k };
+        }
+      }
+      { kk in [0,uk]:
+        mipp::Reg<TYPE> b{ k };
+      }
+      { kk in [0,uk]:
+        b{ k }=mipp::set1<TYPE>(B[k+{ k }]);
+      }
+      { ii in [0,ui]
+        { kk in [0,uk]:
+          a{ i }_{ k }.load(&A[BLOCKI*(k+ { k } ) + i+{ i }*nv]);
+        }
+      }
+      { ii in [0,ui]
+        { kk in [0,uk]:
+          c{ i }_0 = mipp::fmadd(a{ i }_{ k }, b{ k },c{ i }_0);
+        }
+      }
+    }
+    { ii in [0,ui]
+      c{ i }_0.store(&C[i+{ i }*nv]);
+    }
+  }   
+  \end{lstlisting}
+  \\
+\end{tabular}
+
+
+  \caption{Two different matrix-vector product algorithm vectorized and unrolled.}
+  \label{fig:matvec_algo}
+\end{figure}
+
+\begin{figure*}[h!]
+  \begin{subfigure}[h]{0.5\textwidth}  
+  \includegraphics[width=\textwidth]{../autobench/datas/matvec/matvec_ui_1_16_uk_1_16.pdf}
+  \caption{Store every loop step}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.5\textwidth}  
+  \includegraphics[width=\textwidth]{../autobench/datas/matvec_fewstores/matvec_fewstores_ui_1_32_uk_1_32.pdf}
+  \caption{Broadcast every loop step}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.5\textwidth}  
+  \includegraphics[width=\textwidth]{../autobench/datas/matvec/threading/matvec_ui_1_16_uk_1_16_hyper_threading.pdf}
+  \caption{Store every loop step (hyper threading)}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.5\textwidth}  
+  \includegraphics[width=\textwidth]{../autobench/datas/matvec_fewstores/threading/matvec_fewstores_ui_1_16_uk_1_16_hyper_threading.pdf}
+  \caption{Broadcast every loop step (hyper threading)}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.5\textwidth}  
+  \includegraphics[width=\textwidth]{../autobench/datas/matvec/threading/matvec_ui_1_16_uk_1_16_multi_threading.pdf}
+  \caption{Store every loop step (multi threading)}
+  \end{subfigure}
+  \begin{subfigure}[h]{0.5\textwidth}  
+  \includegraphics[width=\textwidth]{../autobench/datas/matvec_fewstores/threading/matvec_fewstores_ui_1_16_uk_1_16_multi_threading.pdf}
+  \caption{Broadcast every loop step (multi threading)}
+  \end{subfigure}
+  
+  \caption{Comparison of $A\times x$ performance, with $A$ a $1024\times1024$ matrix and $x$ a vector of length $1024$. Type of data is float.}
+  \label{fig:matvec_comp}
+\end{figure*}
+
+
+A lot of points on those graphs are red because every float of the matrix in loaded only one time, so in the assembly code, the \texttt{fmadd} instruction is directly loading the vector register, like this:
+
+\begin{center}
+  \texttt{vfmadd231ps -0x40(\%rdi),\%ymm9,\%ymm2}\\
+  \texttt{vfmadd231ps -0x20(\%rdi),\%ymm9,\%ymm1}
+\end{center}
+
+Thus, only $i+j$ vector register are physically used, while there is theoretically $i+j+i*j$ vector registers used at the same time. This behavior allows a greater unrolling without using the spill.
+
+%===============================
+
 \section{Related Works}
 \section{Conclusion}
 \label{sec:conclusion}
